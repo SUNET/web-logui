@@ -72,10 +72,12 @@ function updateViewsDropdown() {
 						var i = 0;
 						$('<input type="hidden" name="multifilter[id]" class="multifilter-input">').val(item.id).appendTo('#multifilter-form');
 						Object.keys(filters).forEach(function(key) {
-							$('<input type="hidden" name="multifilter[items][' + i + '][field]" class="multifilter-input">').val(key).appendTo('#multifilter-form');
-							$('<input type="hidden" name="multifilter[items][' + i + '][operator]" class="multifilter-input">').val(filters[key][0].operator).appendTo('#multifilter-form');
-							$('<input type="hidden" name="multifilter[items][' + i + '][value]" class="multifilter-input">').val(filters[key][0].value).appendTo('#multifilter-form');
-							i++;
+							filters[key].forEach(function(item) {
+								$('<input type="hidden" name="multifilter[items][' + i + '][field]" class="multifilter-input">').val(key).appendTo('#multifilter-form');
+								$('<input type="hidden" name="multifilter[items][' + i + '][operator]" class="multifilter-input">').val(item.operator).appendTo('#multifilter-form');
+								$('<input type="hidden" name="multifilter[items][' + i + '][value]" class="multifilter-input">').val(item.value).appendTo('#multifilter-form');
+								i++;
+							});
 						});
 						$('#multifilter-form').submit();
 					}
