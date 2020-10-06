@@ -13,7 +13,6 @@ require_once BASE.'/inc/utils.php';
 require_once BASE.'/inc/twig.php';
 
 // Initial settings
-$limit = 10000; // Need limit, because of memory
 $timesort = [];
 $clients = [];
 $conditions = [
@@ -54,17 +53,31 @@ function substrdots($text, $len)
 // Perform actual requests
 echo "Making query ".json_encode($conditions)."\n";
 foreach ($settings->getNodes() as $n => $r) {
-	$data = $clients[$n]->operation('/protobuf', 'POST', null, [
-		'command' => 'F',
-		'program' => 'smtpd',
-		'payload' => [
-			'paging' => ['limit' => $limit],
-			'conditions' => $conditions
-		]
-	]);
-
-	if (is_array($data->body->items)) foreach ($data->body->items as $item)
-		$timesort[$item->ts][] = array('id' => $n, 'type' => 'queue', 'data' => $item);
+    $offset = 0;
+    $limit = 1000;
+    $items = [];
+    while (true) {
+        $data = $clients[$n]->operation('/protobuf', 'POST', null, [
+            'command' => 'F',
+            'program' => 'smtpd',
+            'payload' => [
+                'paging' => ['limit' => $limit, 'offset' => $offset],
+                'conditions' => $conditions
+            ]
+        ]);
+        if (is_array($data->body->items)) {
+            $items = array_merge($items, $data->body->items);
+            if (count($data->body->items) !== $limit) {
+                break;
+            }
+            $offset += 1000;
+        } else {
+            break;
+        }
+    }
+    foreach ($items as $item) {
+        $timesort[$item->ts][] = array('id' => $n, 'type' => 'queue', 'data' => $item);
+    }
 }
 krsort($timesort);
 if (empty($timesort))
