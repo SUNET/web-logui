@@ -107,7 +107,11 @@ $_SESSION['source'] = 'external';
 $_SESSION['access'] = isset($_POST['access']) ? $_POST['access'] : array('mail' => array($_GET['username']));
 $_SESSION['authenticated'] = true;
 $_SESSION['navbar_hide'] = $settings->getSessionNavbarHide();
-$_SESSION['textlog_access'] = isset($_GET['textlog']);
+$_SESSION['feature_access'] = [];
+if (isset($_GET['textlog']) && $_GET['textlog'] === '1')
+  $_SESSION['feature_access'][] = 'textlog';
+if (isset($_GET['report']) && $_GET['report'] === '1')
+  $_SESSION['feature_access'][] = 'report';
 die(json_encode(array('session' => session_id())));
 
 ?>

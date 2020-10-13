@@ -53,9 +53,9 @@
         <li class="nav-item dropdown">
           <a href="#" class="btn btn-outline-secondary dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-ban"></i>&nbsp;{% trans %}preview.nav.report.title{% endtrans %}</a>
           <div class="dropdown-menu dropdown-menu-right" role="menu">
-            {% if reportfp %}<a class="dropdown-item" href="{{ app.request.uri }}&report=1&reporttype=fp">{% trans %}preview.nav.report.option.fp{% endtrans %}</a>{% endif %}
-            {% if reportfpfile %}<a class="dropdown-item" href="{{ app.request.uri }}&report=1&reporttype=fp&file=1">{% trans %}preview.nav.report.option.fpfile{% endtrans %}</a>{% endif %}
-            {% if reportfn %}<a class="dropdown-item" href="{{ app.request.uri }}&report=1&reporttype=fn&file=1">{% trans %}preview.nav.report.option.fn{% endtrans %}</a>{% endif %}
+            {% if reportfp %}<a class="dropdown-item" href="{{ request_uri }}&report=1&reporttype=fp">{% trans %}preview.nav.report.option.fp{% endtrans %}</a>{% endif %}
+            {% if reportfpfile %}<a class="dropdown-item" href="{{ request_uri }}&report=1&reporttype=fp&file=1">{% trans %}preview.nav.report.option.fpfile{% endtrans %}</a>{% endif %}
+            {% if reportfn %}<a class="dropdown-item" href="{{ request_uri }}&report=1&reporttype=fn&file=1">{% trans %}preview.nav.report.option.fn{% endtrans %}</a>{% endif %}
           </div>
         </li>
       {% endif %}

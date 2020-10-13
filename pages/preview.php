@@ -170,7 +170,7 @@ if ($settings->getGeoIP()) {
 require_once BASE.'/inc/twig.php';
 
 $reportfp = $reportfpbody = $reportfn = false;
-if (Session::Get()->checkAccessAll()) {
+if (Session::Get()->checkAccessAll() || Session::Get()->checkReportAccess()) {
   $scores = history_parse_scores($mail);
   if (isset($scores['rpd']['score'])) {
     if ($scores['rpd']['score'] === 'Bulk' || $scores['rpd']['score'] === 'Spam') {
@@ -178,20 +178,30 @@ if (Session::Get()->checkAccessAll()) {
       if ($msgaction === 'QUEUE' || $msgaction === 'QUARANTINE')
         $reportfpfile = true;
     }
-    if ($scores['rpd']['score'] !== 'Spam' && $msgaction === 'QUEUE')
+    if ($scores['rpd']['score'] !== 'Spam' && ($msgaction === 'QUEUE' || $msgaction === 'QUARANTINE'))
       $reportfn = true;
   }
   if (isset($_GET['report'])) {
     $reportdata = [];
     $reporttype = ($_GET['reporttype'] == 'fn') ? 'fn' : 'fp';
+
     $reportvalid = false;
     if ($reporttype == 'fp' && ($reportfp || $reportfpfile))
       $reportvalid = true;
     if ($reporttype == 'fn' && $reportfn)
       $reportvalid = true;
+
     if ($reportvalid) {
-      if ($reporttype == 'fp' && $reportfp)
-        $reportdata['refid'] = isset($scores['rpd']['text']) ? $scores['rpd']['text'] : '';
+      $scores = history_parse_scores($mail) ?: null;
+      $reportdata['messageid'] = $mail->msgid;
+      $reportdata['actionid'] = $mail->msgactionid;
+			if ($reporttype == 'fp' && $reportfp)
+				$reportdata['refid'] = isset($scores['rpd']['text']) ? $scores['rpd']['text'] : '';
+			if (!empty($reportdata)) {
+        $reportdata['type'] = $reporttype;
+				require_once BASE.'/pages/report.php';
+				die();
+			}
     }
   }
 }
@@ -214,6 +224,7 @@ unset($f['preview']);
 $show_html_link = '?'.http_build_query($f);
 
 $twigLocals = [
+  'request_uri'         => $_SERVER['REQUEST_URI'],
   'index'               => $_GET['index'],
   'node_id'							=> isset($node_id) ? $node_id : null,
   'found_in_node'				=> $found_in_node,
