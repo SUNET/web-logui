@@ -12,10 +12,11 @@
 
 {% block scripts %}
   {{ parent() }}
-  <script src="static/js/moment.js"></script>
+  <script src="static/js/moment-with-locales.js"></script>
+  <script>moment.locale('{{ set_locale }}');</script>
   <script src="vendor/components/jqueryui/jquery-ui.min.js"></script>
   <script src="static/bootstrap-datepicker/js/bootstrap-datepicker.min.js"></script>
-  <script src="static/chartjs/Chart.bundle.min.js"></script>
+  <script src="static/chartjs/Chart.min.js"></script>
   <script src="static/js/charts.js"></script>
   <script src="static/js/stats.js"></script>
   <script src="static/js/datepicker.js"></script>

@@ -279,9 +279,9 @@
               <td>
                 <a class="text-dark text-decoration-none" href="{{ mail.previewlink }}">
                   {% if mail.today %}
-                    <span class="d-none d-lg-inline">{{ mail.time|date('M j Y') }}, </span>{{ mail.time|date('H:i') }}<span class="d-none d-lg-inline">{{ mail.time|date(':s') }}</span>
+                    <span class="d-none d-lg-inline">{{ mail.time|date('M j Y')|format_date() }}, </span>{{ mail.time|date('H:i:s')|format_time() }}
                   {% else %}
-                    {{ mail.time|date('M j Y') }}<span class="d-none d-lg-inline">, {{ mail.time|date('H:i:s') }}</span>
+                    {{ mail.time|date('M j Y')|format_date() }}<span class="d-none d-lg-inline">, {{ mail.time|date('H:i:s')|format_time() }}</span>
                   {% endif %}
                 </a>
               </td>
@@ -307,7 +307,7 @@
                 <span style="color: #fff;" class="{{ mail.action_icon }}"></span>
               </td>
               <td class="p-2">
-                <span class="float-right">{% if mail.today %}{{ mail.time|date('H:i') }}{% else %}{{ mail.time|date('m j Y') }}{% endif %}</span>
+                <span class="float-right">{% if mail.today %}{{ mail.time|date('H:i:s')|format_time() }}{% else %}{{ mail.time|date('M j Y')|format_date() }}{% endif %}</span>
                 <h5 class="list-group-item-heading">
                   {% if mail.doc.msgfrom %}{{ mail.doc.msgfrom }}{% else %}<span class="text-muted">{% trans %}index.table.tbody.mail.emptysender{% endtrans %}</span>{% endif %}
                   {% if mailhasmultipleaddresses %}<br><small>&rarr;&nbsp;{{ mail.doc.msgto }}</small>{% endif %}

@@ -1,6 +1,12 @@
 <?php
 
-function preferred_language ($languages, $accept)
+function valid_locale($languages, $locale) {
+  if (!$languages)
+    return false;
+  return in_array($locale, $languages);
+}
+
+function preferred_language($languages, $accept)
 {
   // HTTP_ACCEPT_LANGUAGE is defined in
   // http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.4
@@ -52,8 +58,17 @@ $languages = array_map(function ($f) {
 
 unset($languages[array_search('en-us', $languages)]);
 $languages = array_merge(['en-us'], $languages);
-$preferred_language = preferred_language($languages, $_SERVER['HTTP_ACCEPT_LANGUAGE']);
-$preferred_language = explode('-', $preferred_language);
-$preferred_language = $preferred_language[0] . '_' . strtoupper($preferred_language[1]);
+
+if (is_string($_SESSION['locale'])) {
+  if (valid_locale($languages, str_replace('_', '-', strtolower($_SESSION['locale']))))
+    $preferred_language = $_SESSION['locale'];
+}
+if (!$preferred_language) {
+  $preferred_language = preferred_language($languages, $_SERVER['HTTP_ACCEPT_LANGUAGE']);
+  $preferred_language = explode('-', $preferred_language);
+  $preferred_language = $preferred_language[0] . '_' . strtoupper($preferred_language[1]);
+}
+
 putenv('LC_ALL='.$preferred_language.'.UTF-8');
 setlocale(LC_ALL, $preferred_language.'.UTF-8');
+locale_set_default($preferred_language);
