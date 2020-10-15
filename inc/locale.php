@@ -60,14 +60,15 @@ unset($languages[array_search('en-us', $languages)]);
 $languages = array_merge(['en-us'], $languages);
 
 if (is_string($_SESSION['locale'])) {
-  if (valid_locale($languages, str_replace('_', '-', strtolower($_SESSION['locale']))))
-    $preferred_language = $_SESSION['locale'];
+  $session_locale = str_replace('_', '-', strtolower($_SESSION['locale']));
+  if (valid_locale($languages, $session_locale))
+    $preferred_language = $session_locale;
 }
-if (!$preferred_language) {
+if (!$preferred_language)
   $preferred_language = preferred_language($languages, $_SERVER['HTTP_ACCEPT_LANGUAGE']);
-  $preferred_language = explode('-', $preferred_language);
-  $preferred_language = $preferred_language[0] . '_' . strtoupper($preferred_language[1]);
-}
+
+$preferred_language = explode('-', $preferred_language);
+$preferred_language = $preferred_language[0] . '_' . strtoupper($preferred_language[1]);
 
 putenv('LC_ALL='.$preferred_language.'.UTF-8');
 setlocale(LC_ALL, $preferred_language.'.UTF-8');
