@@ -32,7 +32,7 @@ $esBackend = new ElasticsearchBackend($settings->getElasticsearch());
 // Default values
 $search = isset($_GET['search']) ? $_GET['search'] : '';
 $size = isset($_GET['size']) ? intval($_GET['size']) : 50;
-$size = $size > 1000 ? 1000 : $size;
+$size = !isset($_GET['exportcsv']) && $size > 1000 ? 1000 : $size;
 
 // time partitioning
 [$index_start, $index_stop] = valid_date_range($_GET['start'], $_GET['stop']);
