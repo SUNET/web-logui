@@ -4,7 +4,7 @@
 		"components/font-awesome": "5.9.*",
 		"twbs/bootstrap": "^4.5",
 		"ext-json": "*",
-		"ext-intl": "Internationalization functions",
+		"ext-intl": "*",
 		"elasticsearch/elasticsearch": "^7.0",
 		"components/jquery": "^3.3",
 		"ongr/elasticsearch-dsl": "^7.0",
