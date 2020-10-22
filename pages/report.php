@@ -13,7 +13,7 @@ if (!isset($reportdata)) die("Unable to report mail");
         <input type="hidden" name="refid" value="<?php echo htmlspecialchars($reportdata['refid']) ?>">
       <?php } ?>
       <?php
-        if (isset($reportdata['messageid']) && isset($reportdata['actionid'])) {
+        if (isset($client) && isset($reportdata['messageid']) && isset($reportdata['actionid'])) {
       ?>
         <textarea name="email" style="display:none"><?php
         try {
@@ -44,7 +44,7 @@ if (!isset($reportdata)) die("Unable to report mail");
       <script>
         window.onload = function() {
           document.getElementById("reportform").submit();
-          history.back();
+          setTimeout(function() { history.back(); }, 500);
         }
       </script>
     </form>
