@@ -77,7 +77,7 @@ $(document).ready(function() {
   $('#filter-value').attr('disabled', true);
 
   fields.map(function (field, index) {
-    $('#filter-field').append(
+    $('#ff').append(
       $('<option>', {
         value: field.name,
         text: field.label
@@ -85,12 +85,12 @@ $(document).ready(function() {
     );
   });
 
-  $('#filter-field').on('change', function(e) {
-    $('#filter-operator').empty();
+  $('#ff').on('change', function(e) {
+    $('#fo').empty();
     var field = fields.find(i => i.name == e.currentTarget.value);
     if (typeof field == 'object') {
       field.operator.map(function (operator) {
-        $('#filter-operator').append(
+        $('#fo').append(
           $('<option>', {
             value: operator,
             text: operator
@@ -99,15 +99,15 @@ $(document).ready(function() {
       });
 
       if (field.type == 'select') {
-        $('#filter-value-field').html('<select class="custom-select" id="filter-value" name="filter-value"></select');
+        $('#filter-value-field').html('<select class="custom-select" id="fv" name="fv"></select');
         field.options.map(function (option) {
-          $('#filter-value').append('<option value="' + option + '">' + option + '</option>');
+          $('#fv').append('<option value="' + option + '">' + option + '</option>');
         });
       } else {
-        $('#filter-value-field').html('<input type="text" class="form-control" id="filter-value" name="filter-value" size="30">');
+        $('#filter-value-field').html('<input type="text" class="form-control" id="fv" name="fv" size="30">');
       }
 
-      $('#filter-value').attr('disabled', false);
+      $('#fv').attr('disabled', false);
     }
   });
 });
