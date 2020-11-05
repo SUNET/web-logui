@@ -1,0 +1,165 @@
+pages:
+  login: 'Inloggen'
+  messages: 'Berichten'
+  textlog: 'Text log'
+  statistics: 'Statistieken'
+nav:
+  messages: 'Berichten'
+  statistics: 'Statistieken'
+  signout: 'Uitloggen'
+login:
+  title: 'Inloggen'
+  username: 'Gebruikersnaam'
+  password: 'Wachtwoord'
+  buttons:
+    signin: 'Log in'
+index:
+  nav:
+    search:
+      input: 'Zoek voor...'
+    refresh: 'Ververs'
+    filter: 'Filter toevoegen'
+    interval:
+      between: 'tot'
+      option:
+        1: 'Vandaag'
+        2: 'Deze week'
+        3: 'Deze maand'
+        4: 'Dit jaar'
+        5: 'Laatste 30 dagen'
+        6: 'Laatste 60 dagen'
+        7: 'Laatste 6 maanden'
+        8: 'Laatste 24 uur'
+    exportcsv: 'Exporteren'
+    views:
+        title: 'Overzicht'
+        dropdown:
+          save: 'Overzicht opslaan als...'
+          delete: 'Verwijder geselecteerde overzicht'
+          stored: 'Opgeslagen overzichten'
+          empty: 'Leeg'
+  error:
+    message: 'Sommige berichten zijn mogelijk niet beschikbaar op dit moment vanwege onderhoud.'
+    debug: 'Diagnostische gegevens'
+  table:
+    thead:
+      from: 'Van'
+      to: 'Naar'
+      subject: 'Onderwerp'
+      status: 'Status'
+      scores: 'Score'
+      date: 'Datum'
+    tbody:
+      msgaction:
+        quarantine: 'Quarantaine'
+        archive: 'Archief'
+        queue: 'In wachtrij (poging %count%)'
+      action:
+        retry: 'Vrijgeven/Opnieuw proberen'
+        duplicate: 'Duplicaten vrijgeven'
+      mail:
+        emptysender: 'Lege afzender'
+    empty: 'Geen overeenkomsten gevonden'
+  paging:
+    next: 'Volgende'
+    previous: 'Vorige'
+    limit: 'resultaten per pagina'
+    totalcount: '%count% overeenkomsten'
+  modal:
+    csv:
+      title: 'Exporteer CSV'
+      paragraph: 'Kies een of meerdere velden om toe te voegen in de CSV-file.'
+      fields:
+        title: 'Velden'
+        checkbox:
+          action: 'Actie'
+          from: 'Van'
+          to: 'Naar'
+          subject: 'Onderwerp'
+          status: 'Status'
+          date: 'Datum'
+          scores: 'Score'
+      limit: 'Items om te exporteren'
+      headers: 'Inclusief kolomkoppen'
+      buttons:
+        close: 'Sluiten'
+        export: 'Exporteer'
+preview:
+  title: 'Bericht'
+  nav:
+    back: 'Terug'
+    report:
+      title: 'Rapporteer'
+      option:
+        fp: '...geblokkeerde e-mail (FP)'
+        fpfile: '...geblokkeerde e-mail (FP) met e-mail inhoud'
+        fn: '...spam e-mail (FN)'
+    textlog: 'Tekst log'
+    download:
+      title: 'Download'
+      option:
+        modified: '...aangepast'
+        original: '...origineel'
+    actions:
+      title: 'Acties'
+      delete: 'Verwijder'
+      bounce: 'Bounce'
+      release: 'Vrijgeven'
+      retry: 'Opnieuw proberen'
+      duplicate: 'Duplicaat vrijgeven'
+  card:
+    details:
+      title: 'Details'
+      fields:
+        action: 'Actie'
+        sender: 'Verzender'
+        recipient: 'Ontvanger'
+        subject: 'Onderwerp'
+        date: 'Ontvangen'
+        size: 'Grote'
+        details: 'Details'
+        inqueue: 'In wachtrij (poging %count%)'
+        listener: 'Ontvangen door'
+        senderip: 'Verzender IP'
+        senderhelo: 'Verzender HELO'
+        sasl: 'Gebruiker'
+        transport: 'Bestemming'
+        id: 'ID'
+        tlsstarted: 'TLS is gebruikt met het ontvangen van dit bericht'
+    scores:
+      title: 'Score'
+      thead:
+        engine: 'Engine'
+        result: 'Resultaat'
+        signature: 'Signature'
+      tbody:
+        empty: 'Geen score'
+    metadata:
+      title: 'Metadata'
+    content:
+      state:
+        nosubject:
+          title: 'Geen onderwerp'
+        nopermission:
+          title: 'Inhoud verborgen'
+          message: 'U heeft geen rechten voor voorbeeld weergaven.'
+        unavailable:
+          title: 'Inhoud niet beschikbaar'
+          message: 'Bericht is niet in wachtrij of quarantaine'
+      source:
+        original: 'Origineel weergeven'
+        modified: 'Aangepaste weergeven'
+      headers:
+        title: 'Headers'
+        added: 'Toegevoegd'
+        removed: 'Verwijderd'
+textlog:
+  title: 'Text log'
+  more: 'Meer'
+  nav:
+    back: 'Terug naar voorbeeld'
+statistics:
+  nav:
+    target: 'Filter op domein...'
+    savechanges: 'Wijzigingen opslaan'
+    refresh: 'Ververs'
