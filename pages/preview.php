@@ -56,12 +56,11 @@ if (isset($mail->serialno) && in_array($msgaction, ['QUEUE', 'QUARANTINE'])) {
 
   $node = $settings->getNodeBySerial($mail->serialno);
   if ($node) {
-    if ($mail->msgsize > 1 * 1024 * 1024)
-      throw new RestException(400, 'Message size exceeded');
-
     $found_in_node = true;
     $results = [];
     try {
+      if ($mail->msgsize > 1 * 1024 * 1024)
+        throw new RestException(400, 'Message size exceeded');
       $node_id = $node->getId();
       $client = $node->rest();
 
