@@ -22,20 +22,10 @@ use ONGR\ElasticsearchDSL\Aggregation\Metric\AvgAggregation;
 class ElasticsearchBackend extends Backend
 {
   private $es = null;
-  private $rotate;
 
   public function __construct($es)
   {
     $this->es = $es;
-    $this->rotate = $this->es->getRotate();
-    if (!in_array($this->es->getIndex().strftime($this->rotate, time()), Session::Get()->getElasticsearchIndices())) {
-      try {
-        $params = [
-          'index' => [$this->es->getIndex().'*', $this->es->getTextlogIndex().'*']
-        ];
-        Session::Get()->setElasticsearchIndices(array_keys($this->es->client()->indices()->get($params)));
-      } catch (Exception $e) { die($e->getMessage()); }
-    }
   }
 
   public function isValid() { return $this->client() != null; }
@@ -69,17 +59,6 @@ class ElasticsearchBackend extends Backend
     try {
       $results = [];
       $settings = Settings::Get();
-
-      // set up interval for indices
-      $indices = $this->initIndices(
-        $this->es->getIndex(),
-        $this->es->getRotate(),
-        $param['index_range']['start'],
-        $param['index_range']['stop']
-      );
-
-      if (count($indices) < 1)
-        return [];
 
       $schema = $settings->getElasticsearchMappings();
 
@@ -243,9 +222,15 @@ class ElasticsearchBackend extends Backend
       $body->addQuery($restrict);
       $body->addSort($sort);
 
+      // index pattern
+      if ($this->es->getIndex())
+        $index = !preg_match("/\*$/", $this->es->getIndex()) ? $this->es->getIndex().'*' : $this->es->getIndex(); // #deprecated
+      else
+        $index = $this->es->getPattern();
+
       // params
       $params = [
-        'index' => implode(',', $indices),
+        'index' => $index,
         'from' => $param['offset'],
         'size' => $size + 1,
         'body' => $body->toArray()
@@ -307,21 +292,6 @@ class ElasticsearchBackend extends Backend
     $page = $page > 0 && $page < 100 ? $page : 1;
 
     try {
-      // set up indices
-      $indices = $this->initIndices(
-        $this->es->getTextlogIndex(),
-        $this->es->getTextlogRotate(),
-        $msgts0,
-        time(),
-        true
-      );
-
-      if (count($indices) < 1)
-        return [];
-
-      if (count($indices) > $this->es->getTextlogRotateLimit())
-        $indices = array_slice($indices, 0, $this->es->getTextlogRotateLimit());
-
       // sort
       $sort = new FieldSort($this->es->getTextlogTimefilter(), FieldSort::ASC);
 
@@ -333,8 +303,14 @@ class ElasticsearchBackend extends Backend
       $body->addQuery($query);
       $body->addSort($sort);
 
+      // index pattern
+      if ($this->es->getTextlogIndex())
+        $index = !preg_match("/\*$/", $this->es->getTextlogIndex()) ? $this->es->getTextlogIndex().'*' : $this->es->getTextlogIndex(); // #deprecated
+      else
+        $index = $this->es->getTextlogPattern();
+
       $params = [
-        'index' => implode(',', $indices),
+        'index' => $index,
         'type' => $this->es->getTextlogType(),
         'size' => ($this->es->getTextlogLimit() * $page) + 1,
         'body' => $body->toArray()
@@ -359,16 +335,6 @@ class ElasticsearchBackend extends Backend
       $settings = Settings::Get();
       $result = [];
       $f = 0;
-
-      $indices = $this->initIndices(
-        $this->es->getIndex(),
-        $this->es->getRotate(),
-        $param['start'],
-        $param['stop']
-      );
-
-      if (count($indices) < 1)
-        return [];
 
       $body = new Search();
 
@@ -420,8 +386,14 @@ class ElasticsearchBackend extends Backend
       $body->addQuery($restrict);
       $body->addAggregation($aggregation);
 
+      // index pattern
+      if ($this->es->getIndex())
+        $index = !preg_match("/\*$/", $this->es->getIndex()) ? $this->es->getIndex().'*' : $this->es->getIndex(); // #deprecated
+      else
+        $index = $this->es->getPattern();
+
       $params = [
-        'index' => implode(',', $indices),
+        'index' => $index,
         'type' => $this->es->getType(),
         'body' => $body->toArray(),
         'size' => 0
@@ -508,41 +480,5 @@ class ElasticsearchBackend extends Backend
         $restrict[] = ['type' => 'saslusername', 'value' => $sasl];
 
     return $restrict;
-  }
-
-  private function initIndices($index, $rotate, $start, $stop, $timestamp = false)
-  {
-    if ($timestamp) {
-      $intervalStart = new DateTime();
-      $intervalStart->setTimestamp($start);
-      $intervalStart->modify('-1 day');
-
-      $intervalStop = new DateTime();
-      $intervalStop->setTimestamp($stop);
-      $intervalStop->modify('+1 day');
-    } else {
-      // set up interval for indices
-      $intervalStart = new DateTime($start);
-      $intervalStart->modify('-1 day');
-      $intervalStop = new DateTime($stop);
-      $intervalStop->modify('+2 day');
-    }
-    $intervalPeriod = new DatePeriod($intervalStart, new DateInterval('P1D'), $intervalStop);
-
-    // verify indices
-    $indices = [];
-    foreach ($intervalPeriod as $date) {
-      $i = $index.strftime($rotate, $date->getTimestamp());
-      if ($this->validIndex($i))
-        $indices[] = $i;
-    }
-    return $indices;
-  }
-
-  public function validIndex($index)
-  {
-    if (in_array($index, Session::Get()->getElasticsearchIndices()))
-      return true;
-    return false;
   }
 }

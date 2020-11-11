@@ -55,12 +55,10 @@
  */
 
 // $settings['elasticsearch']['host'][] = '127.0.0.1:9200';
-// $settings['elasticsearch']['index']['mail']['name'] = 'halon-';
-// $settings['elasticsearch']['index']['mail']['rotate'] = '%Y-%m-%d';
+// $settings['elasticsearch']['index']['mail']['pattern'] = 'halon-*';
 // $settings['elasticsearch']['index']['mail']['timefilter'] = 'receivedtime';
 
-// $settings['elasticsearch']['index']['textlog']['name'] = 'logstash-';
-// $settings['elasticsearch']['index']['textlog']['rotate'] = '%Y.%m.%d';
+// $settings['elasticsearch']['index']['textlog']['pattern'] = 'logstash-*';
 // $settings['elasticsearch']['index']['textlog']['type'] = '_doc';
 // $settings['elasticsearch']['index']['textlog']['limit'] = 50;
 // $settings['elasticsearch']['index']['textlog']['search_rotate_limit'] = 10;
