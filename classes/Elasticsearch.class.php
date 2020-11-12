@@ -21,7 +21,7 @@ class Elasticsearch
 
   private $username;
   private $password;
-  private $tls;
+  private $ssl;
   private $timeout;
 
   public function client() { return $this->_client; }
@@ -37,7 +37,7 @@ class Elasticsearch
   public function getTextlogLimit() { return $this->textlog_limit; }
   public function getTextlogRotateLimit() { return $this->textlog_rotatelimit; }
 
-  public function __construct($hosts, $index, $username = null, $password = null, $tls = [], $timeout = null)
+  public function __construct($hosts, $index, $username = null, $password = null, $ssl = true, $timeout = null)
   {
     $this->hosts = $hosts;
     $this->pattern = $index['mail']['pattern'];
@@ -54,11 +54,11 @@ class Elasticsearch
 
     $this->username = $username;
     $this->password = $password;
-    $this->tls = $tls;
+    $this->ssl = $ssl;
     $this->timeout = is_numeric($timeout) ? $timeout : 5;
 
     try {
-      $this->_client = ClientBuilder::create()->setHosts($this->hosts)->build();
+      $this->_client = ClientBuilder::create()->setHosts($this->hosts)->setSSLVerification($this->ssl)->build();
     } catch(Exception $e) {
       die($e);
     }

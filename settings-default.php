@@ -55,6 +55,7 @@
  */
 
 // $settings['elasticsearch']['host'][] = '127.0.0.1:9200';
+// $settings['elasticsearch']['ssl'] = true;
 // $settings['elasticsearch']['index']['mail']['pattern'] = 'halon-*';
 // $settings['elasticsearch']['index']['mail']['timefilter'] = 'receivedtime';
 
