@@ -10,7 +10,7 @@ class Session
   private $access = null;
   private $disabled_features = null;
   private $navbar_hide = false;
-  private $textlog_access = false;
+  private $feature_access = [];
 
   // elasticsearch
   private $available_indices = [];
@@ -47,8 +47,7 @@ class Session
     if (isset($_SESSION['available_indices']))
       $this->available_indices = $_SESSION['available_indices'];
 
-    if (isset($_SESSION['textlog_access']))
-      $this->textlog_access = $_SESSION['textlog_access'];
+    $this->feature_access = $_SESSION['feature_access'] ?? [];
 
     $this->navbar_hide = isset($_SESSION['navbar_hide']) ? $_SESSION['navbar_hide'] : false;
   }
@@ -150,7 +149,12 @@ class Session
 
   public function checkTextlogAccess()
   {
-    return $this->textlog_access;
+    return in_array('textlog', $this->feature_access);
+  }
+
+  public function checkReportAccess()
+  {
+    return in_array('report', $this->feature_access);
   }
 
   /**

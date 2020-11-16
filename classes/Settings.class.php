@@ -211,7 +211,9 @@ class Settings
 
       $username = isset($this->elasticsearch['username']) ? $this->elasticsearch['username'] : null;
       $password = isset($this->elasticsearch['password']) ? $this->elasticsearch['password'] : null;
-      $this->elasticsearchClient = new Elasticsearch($hosts, $this->elasticsearch['index'], $username, $password);
+      $ssl = isset($this->elasticsearch['ssl']) ? $this->elasticsearch['ssl'] : true;
+
+      $this->elasticsearchClient = new Elasticsearch($hosts, $this->elasticsearch['index'], $username, $password, $ssl);
     }
     return $this->elasticsearchClient;
   }

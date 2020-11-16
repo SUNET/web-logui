@@ -32,7 +32,7 @@ $esBackend = new ElasticsearchBackend($settings->getElasticsearch());
 // Default values
 $search = isset($_GET['search']) ? $_GET['search'] : '';
 $size = isset($_GET['size']) ? intval($_GET['size']) : 50;
-$size = $size > 1000 ? 1000 : $size;
+$size = !isset($_GET['exportcsv']) && $size > 1000 ? 1000 : $size;
 
 // time partitioning
 [$index_start, $index_stop] = valid_date_range($_GET['start'], $_GET['stop']);
@@ -76,14 +76,15 @@ if (isset($_GET['unsetfilter'])) {
   $_SESSION['filters'] = $filters;
 }
 
-if (isset($_POST['filter-field']) && isset($_POST['filter-operator']) && isset($_POST['filter-value'])) {
-  addFilter($_POST['filter-field'], $_POST['filter-operator'], $_POST['filter-value']);
-} else if (isset($_POST['multifilter']) && is_array($_POST['multifilter']['items'])) {
+// ff = field, fo = operator, fv = value
+if (isset($_GET['ff']) && isset($_GET['fo']) && isset($_GET['fv'])) {
+  addFilter($_GET['ff'], $_GET['fo'], $_GET['fv']);
+} else if (isset($_GET['mf']) && is_array($_GET['mf']['f'])) {
   $_SESSION['filters'] = [];
-  $active_view_id = $_POST['multifilter']['id'];
-  foreach ($_POST['multifilter']['items'] as $filter) {
-    if (isset($filter['field']) && isset($filter['operator']) && isset($filter['value']))
-      addFilter($filter['field'], $filter['operator'], $filter['value']);
+  $active_view_id = $_GET['mf']['id'];
+  foreach ($_GET['mf']['f'] as $filter) {
+    if (isset($filter['ff']) && isset($filter['fo']) && isset($filter['fv']))
+      addFilter($filter['ff'], $filter['fo'], $filter['fv']);
   }
 }
 

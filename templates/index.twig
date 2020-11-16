@@ -41,26 +41,26 @@
       <ul class="nav navbar-nav mr-auto ml-md-3">
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown"><i class="fa fa-plus"></i><span class="d-inline d-md-none d-lg-inline">&nbsp;{% trans %}index.nav.filter{% endtrans %}</span></a>
-          <form method="POST">
+          <form method="GET">
             <div class="dropdown-menu" style="width: 400px">
               <h6 class="px-3 py-2">Search filter</h6>
               <div class="dropdown-divider"></div>
               <div class="px-3 py-2">
                 <div class="form-row">
                   <div class="form-group col-md-6">
-                    <label for="filter-field">Field</label>
-                    <select class="custom-select" id="filter-field" name="filter-field">
+                    <label for="ff">Field</label>
+                    <select class="custom-select" id="ff" name="ff">
                       <option></option>
                     </select>
                   </div>
                   <div class="form-group col-md-6">
-                    <label for="filter-operator">Operator</label>
-                    <select class="custom-select" id="filter-operator" name="filter-operator">
+                    <label for="fo">Operator</label>
+                    <select class="custom-select" id="fo" name="fo">
                     </select>
                   </div>
                 </div>
                 <div class="form-group">
-                  <label for="filter-value">Value</label>
+                  <label for="fv">Value</label>
                   <div id="filter-value-field">
                     <input type="text" class="form-control" size="30" disabled>
                   </div>
@@ -71,7 +71,7 @@
           </form>
         </li>
         <li class="nav-item dropdown">
-          <form id="multifilter-form" method="POST" action="?page=index">
+          <form id="multifilter-form" method="GET" action="?page=index">
           </form>
           <input type="hidden" value="{{ filters|json_encode }}" id="store-value">
           <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown"><i class="far fa-eye"></i><span class="d-inline d-md-none d-lg-inline">&nbsp;{% trans %}index.nav.views.title{% endtrans %}</span></a>
@@ -279,9 +279,9 @@
               <td>
                 <a class="text-dark text-decoration-none" href="{{ mail.previewlink }}">
                   {% if mail.today %}
-                    <span class="d-none d-lg-inline">{{ mail.time|date('M j Y') }}, </span>{{ mail.time|date('H:i') }}<span class="d-none d-lg-inline">{{ mail.time|date(':s') }}</span>
+                    <span class="d-none d-lg-inline">{{ mail.time|date('M j Y')|format_date() }}, </span>{{ mail.time|date('H:i:s')|format_time() }}
                   {% else %}
-                    {{ mail.time|date('M j Y') }}<span class="d-none d-lg-inline">, {{ mail.time|date('H:i:s') }}</span>
+                    {{ mail.time|date('M j Y')|format_date() }}<span class="d-none d-lg-inline">, {{ mail.time|date('H:i:s')|format_time() }}</span>
                   {% endif %}
                 </a>
               </td>
@@ -307,7 +307,7 @@
                 <span style="color: #fff;" class="{{ mail.action_icon }}"></span>
               </td>
               <td class="p-2">
-                <span class="float-right">{% if mail.today %}{{ mail.time|date('H:i') }}{% else %}{{ mail.time|date('m j Y') }}{% endif %}</span>
+                <span class="float-right">{% if mail.today %}{{ mail.time|date('H:i:s')|format_time() }}{% else %}{{ mail.time|date('M j Y')|format_date() }}{% endif %}</span>
                 <h5 class="list-group-item-heading">
                   {% if mail.doc.msgfrom %}{{ mail.doc.msgfrom }}{% else %}<span class="text-muted">{% trans %}index.table.tbody.mail.emptysender{% endtrans %}</span>{% endif %}
                   {% if mailhasmultipleaddresses %}<br><small>&rarr;&nbsp;{{ mail.doc.msgto }}</small>{% endif %}
@@ -403,6 +403,8 @@
         </div>
         <form target="_blank">
           <input type="hidden" name="page" value="index">
+          <input type="hidden" name="start" value="{{ index_start }}">
+          <input type="hidden" name="stop" value="{{ index_stop }}">
           <input type="hidden" name="search" value="{{ search }}">
           <input type="hidden" name="exportcsv" value="true">
           <div class="modal-body" id="export">
