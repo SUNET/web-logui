@@ -18,7 +18,13 @@ $(document).ready(function() {
 			var storage = getStoredViews();
 			var val = $('#store-value').val();
 
-			var id = storage.length + 1;
+			var maxId = 0;
+			storage.forEach(function(i) {
+				if (i.id > maxId)
+					maxId = i.id;
+			});
+			var id = maxId + 1;
+
 			var name = '#' + id;
 			if ($('#view-modal-name').val()) {
 				name = $('#view-modal-name').val();
