@@ -70,6 +70,14 @@ if (isset($_GET['session']))
     session_name($session_name);
   session_id($_GET['session']);
   session_start();
+
+  if (!isset($_SESSION['session_transfer'])) {
+    session_destroy();
+    die('Invalid session ID');
+  } else {
+    unset($_SESSION['session_transfer']);
+  }
+
   session_regenerate_id(true);
 
   $page = 'index';
@@ -106,6 +114,7 @@ if (isset($_GET['timezone']) && intval($_GET['timezone'])) {
 if (isset($_GET['locale']))
   $_SESSION['locale'] = $_GET['locale'];
 
+$_SESSION['session_transfer'] = true;
 $_SESSION['username'] = $_GET['username'];
 $_SESSION['source'] = 'external';
 $_SESSION['access'] = isset($_POST['access']) ? $_POST['access'] : array('mail' => array($_GET['username']));
