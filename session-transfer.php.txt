@@ -70,6 +70,7 @@ if (isset($_GET['session']))
     session_name($session_name);
   session_id($_GET['session']);
   session_start();
+  session_regenerate_id(true);
 
   $page = 'index';
   if (isset($_GET['page']))
