@@ -36,6 +36,7 @@ class Settings
 
   private $sessionName = null;
   private $sessionNavbarHide = false;
+  private $sessionTransferIPRestrict = [];
 
   private $elasticsearch = [];
   private $elasticsearchClient = null;
@@ -135,6 +136,7 @@ class Settings
     $this->extract($this->displayIndexColumns, 'display-index-columns');
     $this->extract($this->authSources, 'authentication');
     $this->extract($this->sessionName, 'session-name');
+    $this->extract($this->sessionTransferIPRestrict, 'session-transfer-ip-restrict');
     $this->extract($this->geoIP, 'geoip');
     $this->extract($this->geoIPDatabase, 'geoip-database');
     $this->extract($this->sessionNavbarHide, 'session-navbar-hide');
@@ -403,6 +405,14 @@ class Settings
   public function getSessionName()
   {
     return $this->sessionName;
+  }
+
+  /**
+   * Source IP restriction for session-transfer.php
+   */
+  public function getSessionTransferIPRestrict()
+  {
+    return $this->sessionTransferIPRestrict;
   }
 
   /**

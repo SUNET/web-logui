@@ -145,6 +145,13 @@
 // 		);
 
 /*
+ * Session transfer
+ * Allow only specfic IP addresses to access session-transfer.php to create a new session ID.
+ */
+
+//$settings['session-transfer-ip-restrict'] = ['127.0.0.1'];
+
+/*
  * If hosting multiple websites on the same server, it's important to use
  * different session names for each site.
  */
