@@ -87,7 +87,7 @@ if (isset($_GET['session']))
   die();
 }
 
-if (count(Settings::Get()->getSessionTransferIPRestrict()) > 0 && !in_array($_SERVER['REMOTE_ADDR'], Settings::Get()->getSessionTransferIPRestrict()))
+if (count(Settings::Get()->getSessionTransferRestrictByIP()) > 0 && !in_array($_SERVER['REMOTE_ADDR'], Settings::Get()->getSessionTransferRestrictByIP()))
   die(json_encode(array('error' => 'Access denied')));
 
 if (!isset($_GET['api-key']) || $settings->getAPIKey() !== $_GET['api-key'])
