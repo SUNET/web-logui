@@ -30,14 +30,14 @@ function history_parse_scores($mail)
     $ret['kav']['name'] = 'Sophos';
     if (is_array($mail->scores['kav'])) {
       $ret['kav']['score'] = 'Virus';
-      $ret['kav']['text'] = implode(', ', $viruses);
+      $ret['kav']['text'] = implode(', ', $mail->scores['kav']);
     } else $ret['kav']['score'] = 'Ok';
   }
   if (isset($mail->scores['clam'])) {
     $ret['clam']['name'] = 'ClamAV';
     if (is_array($mail->scores['clam'])) {
       $ret['clam']['score'] = 'Virus';
-      $ret['clam']['text'] = implode(', ', $viruses);
+      $ret['clam']['text'] = implode(', ', $mail->scores['clam']);
     } else $ret['clam']['score'] = 'Ok';
   }
 
