@@ -221,7 +221,7 @@ function setChartData(id, chart, type, target, dataOnly = false) {
 		if (!dataOnly) {
 			$('#chart-' + id).find('.loading').parent().remove();
 			if (data.label)
-				$('#chart-' + id).find('.chart-title').html(data.label + ' - ' + data.group);
+				$('#chart-' + id).find('.chart-title').text(data.label + ' - ' + data.group);
 			if (target)
 				$('#chart-' + id).find('.chart-title').append(' (' + target + ')');
 		}

@@ -68,7 +68,7 @@ function updateViewsDropdown() {
 		var currentId = $('#btn-delete-view').data('id');
 
 		storage.forEach((item, i) => {
-			var itemElement = $('<a class="dropdown-item text-truncate view-item" href="#"></a>').data('id', item.id).html(item.name).on('click', function() {
+			var itemElement = $('<a class="dropdown-item text-truncate view-item" href="#"></a>').data('id', item.id).text(item.name).on('click', function() {
 				try {
 					var storage = getStoredViews();
 					var item = storage.find(i => i.id == $(this).data('id'));
