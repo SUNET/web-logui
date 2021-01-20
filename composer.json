@@ -1,20 +1,20 @@
 {
 	"require": {
-		"ezyang/htmlpurifier": "4.11.*",
-		"components/font-awesome": "5.9.*",
-		"twbs/bootstrap": "^4.5",
+		"ezyang/htmlpurifier": "^4.13",
+		"components/font-awesome": "^5.15",
+		"twbs/bootstrap": "^4.6",
 		"ext-json": "*",
 		"ext-intl": "*",
-		"elasticsearch/elasticsearch": "^7.0",
-		"components/jquery": "^3.3",
-		"ongr/elasticsearch-dsl": "^7.0",
-		"twig/twig": "^3.0.5",
-		"symfony/yaml": "^5.1.7",
-		"symfony/translation": "^5.1.7",
-		"symfony/twig-bridge": "^5.1.7",
+		"elasticsearch/elasticsearch": "^7.10",
+		"components/jquery": "^3.5",
+		"ongr/elasticsearch-dsl": "^7.2",
+		"twig/twig": "^3.2",
+		"symfony/yaml": "^5.2",
+		"symfony/translation": "^5.2",
+		"symfony/twig-bridge": "^5.2",
 		"components/jqueryui": "^1.12",
 		"zbateson/mail-mime-parser": "^1.2",
-		"twig/intl-extra": "^3.0"
+		"twig/intl-extra": "^3.2"
 	},
 	"suggest": {
 		"ext-curl": "Elasticsearch-PHP",
