@@ -164,8 +164,13 @@ function logstash_document_parser($m) {
 }
 
 function valid_date_range($start = null, $stop = null, $strtime = '-24 hours') {
-  $index_start = isset($start) ? $start : date('Y-m-d', strtotime($strtime));
-  $index_stop = isset($stop) ? $stop : date('Y-m-d');
+  if ($start && $stop) {
+    $_SESSION['index_start'] = $start;
+    $_SESSION['index_stop'] = $stop;
+  }
+
+  $index_start = isset($_SESSION['index_start']) ? $_SESSION['index_start'] : date('Y-m-d', strtotime($strtime));
+  $index_stop = isset($_SESSION['index_stop']) ? $_SESSION['index_stop'] : date('Y-m-d');
 
   $check_date = explode('-', $index_start);
   if (count($check_date) != 3 || !checkdate($check_date[1], $check_date[2], $check_date[0]))
