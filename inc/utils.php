@@ -35,7 +35,7 @@ function history_parse_scores($mail)
   }
   if (isset($mail->scores['clam'])) {
     $ret['clam']['name'] = 'ClamAV';
-    if (is_array($mail->scores['clam'])) {
+    if (is_array($mail->scores['clam']) && count($mail->scores['clam']) > 0) {
       $ret['clam']['score'] = 'Virus';
       $ret['clam']['text'] = implode(', ', $mail->scores['clam']);
     } else $ret['clam']['score'] = 'Ok';
