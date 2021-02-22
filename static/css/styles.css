@@ -7,16 +7,33 @@ body {
 	padding-bottom: 20px;
 }
 
+.navbar-shadow {
+	box-shadow: 0px 2px 2px rgba(152, 162, 179, 0.2);
+}
+
 .disabled a {
 	pointer-events: none;
+}
+
+.table-messages td, .table-messages th {
+	vertical-align: middle;
 }
 
 .table-messages td {
 	padding: 0 !important;
 }
 
+.table-messages .table-row-checkbox {
+	padding-left: 0.3rem !important;
+}
+
+.table-messages th {
+	padding-top: 0.6rem;
+	padding-bottom: 0.6rem;
+}
+
 .table-messages td > a {
-	padding: .75rem;
+	padding: 0.3rem;
 	padding-top: .5rem;
 	padding-bottom: .5rem;
 	display: block;

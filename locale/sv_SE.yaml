@@ -18,7 +18,7 @@ index:
     search:
       input: 'Sök efter...'
     refresh: 'Uppdatera'
-    filter: 'Skapa filter'
+    filter: 'Filtrera'
     interval:
       between: 'till'
       option:
@@ -38,6 +38,11 @@ index:
           delete: 'Ta bort vald vy'
           stored: 'Sparade vyer'
           empty: 'Tomt'
+    action:
+      header: 'På alla markerade rader...'
+      bounce: '...studsa'
+      delete: '...ta bort'
+      retry: '...släpp/försök igen'
   error:
     message: 'Vissa meddelanden kan vara otillgängliga för tillfället, beroende på underhåll.'
     debug: 'Diagnostisk information'
@@ -59,6 +64,7 @@ index:
         duplicate: 'Släpp dubblett'
       mail:
         emptysender: 'Ingen avsändare'
+      pendingaction: 'Meddelandet har en ''%action%'' åtgärd som väntar'
     empty: 'Ingen träff'
   paging:
     next: 'Nästa'
@@ -66,6 +72,22 @@ index:
     limit: 'rader per sida'
     totalcount: '%count% matchningar'
   modal:
+    bulk:
+      title: 'Bekräfta åtgärd'
+      message: 'Är du säker på att du vill utföra den här åtgärden på alla markerade rader?'
+      button:
+        submit:
+          bounce: 'Studsa'
+          retry: 'Släpp/försök igen'
+          delete: 'Ta bort'
+    filter:
+      title: "Sökfilter"
+      field: "Fält"
+      operator: "Operator"
+      value: "Värde"
+      buttons:
+        close: "Stäng"
+        add: "Lägg till"
     csv:
       title: 'Exportera CSV'
       paragraph: 'Välj ett eller flera fält att inkludera i CSV-filen.'

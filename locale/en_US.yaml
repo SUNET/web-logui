@@ -18,7 +18,7 @@ index:
     search:
       input: 'Search for...'
     refresh: 'Refresh'
-    filter: 'Add filter'
+    filter: 'Filter'
     interval:
       between: 'to'
       option:
@@ -38,6 +38,11 @@ index:
           delete: 'Delete selected view'
           stored: 'Stored views'
           empty: 'Empty'
+    action:
+      header: 'On all checked items...'
+      bounce: '...bounce'
+      delete: '...delete'
+      retry: '...release/retry'
   error:
     message: 'Some messages might not be available at the moment due to maintenance.'
     debug: 'Diagnostic information'
@@ -59,6 +64,7 @@ index:
         duplicate: 'Release duplicate'
       mail:
         emptysender: 'Empty sender'
+      pendingaction: 'Message has a pending ''%action%'' action'
     empty: 'No matches'
   paging:
     next: 'Next'
@@ -66,6 +72,22 @@ index:
     limit: 'results per page'
     totalcount: '%count% matches'
   modal:
+    bulk:
+      title: 'Confirm action'
+      message: 'Are you sure you want to perform this action on all checked items?'
+      button:
+        submit:
+          bounce: 'Bounce'
+          retry: 'Release/retry'
+          delete: 'Delete'
+    filter:
+      title: 'Search filter'
+      field: 'Field'
+      operator: 'Operator'
+      value: 'Value'
+      buttons:
+        close: 'Close'
+        add: 'Add'
     csv:
       title: 'Export CSV'
       paragraph: 'Choose one or more fields to include in the CSV-file.'

@@ -59,6 +59,26 @@ $(document).ready(function() {
 			}
 		}
 	});
+
+	$('#bulk-modal').on('show.bs.modal', function(event) {
+		var action = $(event.relatedTarget).data('action');
+		var submit = $(this).find('.modal-submit');
+		submit.text(submit.data(action)).on('click', function() {
+			$('#bulk-action-cmd').val(action);
+			$('#bulk-form').submit();
+		});
+	});
+
+	$('#bulk-checkbox-all').on('click', function() {
+		$('input[id^="bulk-action"]').each(function () {
+			$(this).prop('checked', $('#bulk-checkbox-all').is(':checked'));
+		});
+		$('#bulk-action-dropdown').prop('disabled', !$('#bulk-checkbox-all').is(':checked'));
+	});
+
+	$('input[id^="bulk-action"]').on('change', function() {
+		$('#bulk-action-dropdown').prop('disabled', $('input[id^="bulk-action"]:checked').length < 1);
+	});
 });
 
 function updateViewsDropdown() {

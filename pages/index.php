@@ -1,8 +1,28 @@
 <?php
 if (!defined('WEB_LOGUI')) die('File not included');
 
-if (isset($_POST['delete']) || isset($_POST['bounce']) || isset($_POST['retry']) || isset($_POST['duplicate'])) {
-  $actions = array();
+if (is_array($_POST['bulk-action'])) {
+  $esBackend = new ElasticsearchBackend($settings->getElasticsearch());
+  $dbh = $settings->getDatabase();
+
+  if ($dbh) {
+    $bulk_action = $_POST['bulk-action-cmd'];
+    if (!in_array($bulk_action, ['bounce', 'delete', 'retry']))
+      die('Invalid command');
+
+    foreach ($_POST['bulk-action'] as $i) {
+      if (!$_POST['bulk-action-index'][$i] || !$_POST['bulk-action-id'][$i])
+        continue;
+      $m = $esBackend->getMail($_POST['bulk-action-index'][$i], $_POST['bulk-action-id'][$i]);
+      if (!$m)
+        die('Invalid mail');
+
+      $statement = $dbh->prepare('INSERT INTO pending_actions (msgid, actionid, serialno, action) VALUES (:msgid, :actionid, :serialno, :action);');
+      $statement->execute([':msgid' => $m->msgid, ':actionid' => $m->msgactionid, ':serialno' => $m->serialno, ':action' => $bulk_action]);
+    }
+  }
+
+  header('Location: ?page=index&pending='.$_POST['bulk-action-cmd']);
   die();
 }
 
@@ -28,11 +48,15 @@ function get_preview_link($m, $opts = [])
 
 // Backend
 $esBackend = new ElasticsearchBackend($settings->getElasticsearch());
+$dbh = $settings->getDatabase();
+if ($dbh)
+  $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
 // Default values
 $search = isset($_GET['search']) ? $_GET['search'] : '';
 $size = isset($_GET['size']) ? intval($_GET['size']) : 50;
 $size = !isset($_GET['exportcsv']) && $size > 1000 ? 1000 : $size;
+$bulk_action_enabled = false;
 
 // time partitioning
 [$index_start, $index_stop] = valid_date_range($_GET['start'], $_GET['stop']);
@@ -127,6 +151,7 @@ if (count($results) > $size) {
 }
 
 $mails = array();
+$mails_inqueue = [];
 
 foreach ($results as $m) {
   if ($i > $size) { break; }
@@ -138,7 +163,14 @@ foreach ($results as $m) {
 
   $mail = array();
 
+  if ($dbh && in_array($m['doc']->queue['action'] ?? $m['doc']->msgaction, ['QUEUE', 'QUARANTINE'])) {
+    $mail['template']->inqueue = true;
+    $mail['template']->pending_action = null;
+    $mails_inqueue[] = ['msgid' => $m['doc']->msgid, 'actionid' => $m['doc']->msgactionid];
+  }
+
   $mail['doc'] = $m['doc'];
+  $mail['index'] = $m['index'];
 
   if ($m['doc']->msgts0 + (3600 * 24) > time())
     $mail['today'] = true;
@@ -166,6 +198,36 @@ foreach ($results as $m) {
     $mail['scores'] = implode(', ', array_unique($printscores));
   }
   $mails[] = $mail;
+}
+
+// check for pending actions
+if (count($settings->getNodes() ?? 0 > 0) && count($mails_inqueue) > 0) {
+  try {
+    $filter = [];
+    $params = [];
+
+    foreach ($mails_inqueue as $k => $m) {
+      $filter[] = '(msgid = :msgid'.$k.' AND actionid = :actionid'.$k.')';
+      $params['msgid'.$k] = $m['msgid'];
+      $params['actionid'.$k] = $m['actionid'];
+    }
+    $q = $dbh->prepare('SELECT * FROM pending_actions WHERE '.implode(' OR ', $filter).';');
+    foreach ($params as $k => $v)
+      $q->bindValue($k, $v);
+    $q->execute();
+    $pending = $q->fetchAll();
+
+    foreach ($mails as $m) {
+      if ($m['template']->inqueue) {
+        foreach ($pending as $p)
+          if ($p['msgid'] == $m['doc']->msgid && $p['actionid'] == $m['doc']->msgactionid) {
+            $m['template']->pending_action = $p['action'];
+            break;
+          }
+      }
+    }
+    $bulk_action_enabled = true;
+  } catch (PDOException $e) {}
 }
 
 // csv export
@@ -254,7 +316,8 @@ $twigLocals = [
   'sortby'                    => $param['sort'],
   'sortorder'                 => $param['sortorder'],
   'active_view_id'            => $active_view_id ?? false,
-  'table_columns'             => $settings->getDisplayIndexColumns()
+  'table_columns'             => $settings->getDisplayIndexColumns(),
+  'bulk_action_enabled'       => $bulk_action_enabled
 ];
 
 echo $twig->render('index.twig', $twigGlobals + $twigLocals);
