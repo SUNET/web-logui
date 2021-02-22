@@ -18,7 +18,7 @@
 {% endblock %}
 
 {% block body %}
-  <nav class="navbar navbar-expand navbar-light bg-light navbar-toolbar" style="border-bottom: 3px solid {{ action_color }};">
+  <nav class="navbar navbar-expand navbar-light bg-light navbar-shadow">
     <ul class="nav navbar-nav mr-auto">
       <li class="nav-item mr-3" id="history_back"><a class="nav-link" href="#" onclick="history.go(-1); return false;"><i class="far fa-arrow-alt-circle-left"></i>&nbsp;{% trans %}preview.nav.back{% endtrans %}</a></li>
       {% if found_in_node %}
