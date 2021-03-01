@@ -18,7 +18,7 @@ index:
     search:
       input: 'Zoek voor...'
     refresh: 'Ververs'
-    filter: 'Filter toevoegen'
+    filter: 'Filter'
     interval:
       between: 'tot'
       option:
@@ -38,6 +38,11 @@ index:
           delete: 'Verwijder geselecteerde overzicht'
           stored: 'Opgeslagen overzichten'
           empty: 'Leeg'
+    action:
+      header: 'Op alle geselecteerde berichten...'
+      bounce: '...bounce'
+      delete: '...verwijderen'
+      retry: '...vrijgeven/opnieuw proberen'
   error:
     message: 'Sommige berichten zijn mogelijk niet beschikbaar op dit moment vanwege onderhoud.'
     debug: 'Diagnostische gegevens'
@@ -59,6 +64,7 @@ index:
         duplicate: 'Duplicaten vrijgeven'
       mail:
         emptysender: 'Lege afzender'
+      pendingaction: 'Bericht heeft actie ''%action%'' in uitvoering'
     empty: 'Geen overeenkomsten gevonden'
   paging:
     next: 'Volgende'
@@ -66,6 +72,22 @@ index:
     limit: 'resultaten per pagina'
     totalcount: '%count% overeenkomsten'
   modal:
+    bulk:
+      title: 'Bevestig actie'
+      message: 'Deze actie uitvoeren op alle geselecteerde berichten?'
+      button:
+        submit:
+          bounce: 'Bounce'
+          retry: 'Release/retry'
+          delete: 'Delete'
+    filter:
+      title: 'Zoek filter'
+      field: 'Veld'
+      operator: 'Operator'
+      value: 'Waarde'
+      buttons:
+        close: 'Sluiten'
+        add: 'Toevoegen'
     csv:
       title: 'Exporteer CSV'
       paragraph: 'Kies een of meerdere velden om toe te voegen in de CSV-file.'
