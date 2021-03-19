@@ -23,8 +23,6 @@ Halon remote logging to Elasticsearch
 ---
 In order to start logging to Elasticsearch, please see our [Remote logging to Elasticsearch](https://support.halon.io/hc/en-us/articles/115005513365) article.
 
-The implementation code is available in our [code repository](https://github.com/halon/hsl-examples/tree/master/logging/elasticsearch).
-
 Halon remote logging to Logstash
 ---
 
