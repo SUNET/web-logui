@@ -1,108 +1,59 @@
 $(document).ready(function() {
-  var cache = {};
 
-  var fields = [
-    {
-      label: 'From',
-      name: 'from',
-      operator: ['exact', 'contains', 'not']
-    },
-    {
-      label: 'To',
-      name: 'to',
-      operator: ['exact', 'contains', 'not']
-    },
-    {
-      label: 'Subject',
-      name: 'subject',
-      operator: ['exact', 'contains', 'not']
-    },
-    {
-      label: 'Status',
-      name: 'status',
-      operator: ['exact', 'contains', 'not']
-    },
-    {
-      label: 'Remote IP',
-      name: 'remoteip',
-      operator: ['exact', 'not']
-    },
-    {
-      label: 'Message ID',
-      name: 'messageid',
-      operator: ['exact', 'not']
-    },
-    {
-      label: 'Action',
-      name: 'action',
-      operator: ['exact', 'not'],
-      type: 'select',
-      options: [
-        'DELIVER',
-        'QUEUE',
-        'QUARANTINE',
-        'ARCHIVE',
-        'REJECT',
-        'DELETE',
-        'BOUNCE',
-        'ERROR',
-        'DEFER'
-      ]
-    },
-    {
-      label: 'Metadata',
-      name: 'metadata',
-      operator: ['exact', 'contains', 'not']
-    },
-    {
-      label: 'RPD score',
-      name: 'rpdscore',
-      operator: ['exact', 'not'],
-      type: 'select',
-      options: [
-        'spam',
-        'bulk',
-        'valid-bulk',
-        'suspect',
-        'non-spam'
-      ]
-    },
-    {
-      label: 'SA score',
-      name: 'sascore',
-      operator: ['=', '<=', '>=', '<', '>']
-    }
-  ];
+  var filters = {};
+	$.post('?xhr', {
+		'page': 'messages',
+		'type': 'filters'
+	}).done((data) => {
+		if (data.error)
+			return;
+		if (typeof data.filters !== 'object')
+			return;
+
+    filters = data.filters;
+    Object.keys(filters).map(function (field, index) {
+      $('#ff').append(
+        $('<option>', {
+          value: field,
+          text: filters[field].label
+        })
+      );
+    });
+  });
 
   $('#filter-value').attr('disabled', true);
 
-  fields.map(function (field, index) {
-    $('#ff').append(
-      $('<option>', {
-        value: field.name,
-        text: field.label
-      })
-    );
-  });
-
   $('#ff').on('change', function(e) {
     $('#fo').empty();
-    var field = fields.find(i => i.name == e.currentTarget.value);
-    if (typeof field == 'object') {
-      field.operator.map(function (operator) {
-        $('#fo').append(
-          $('<option>', {
-            value: operator,
-            text: operator
-          })
-        );
-      });
-
-      if (field.type == 'select') {
-        $('#filter-value-field').html('<select class="custom-select" id="fv" name="fv"></select');
-        field.options.map(function (option) {
-          $('#fv').append('<option value="' + option + '">' + option + '</option>');
+    var filter = filters[e.currentTarget.value];
+    if (typeof filter == 'object') {
+      if (Array.isArray(filter.operators)) {
+        filter.operators.map(function (operator) {
+          $('#fo').append(
+            $('<option>', {
+              value: operator,
+              text: operator
+            })
+          );
         });
+      }
+      if (typeof filter.values === 'object' || Array.isArray(filter.values)) {
+        $('#filter-value-field').html('<select class="custom-select" id="fv" name="fv"></select>');
+        if (Array.isArray(filter.values)) {
+          filter.values.map(function (option) {
+            $('#fv').append($('<option>', {
+              value: option,
+              text: option
+            }));
+          });
+        } else {
+          Object.keys(filter.values).map(function (option) {
+            $('#fv').append($('<option>', {
+              value: filter.values[option],
+              text: option
+            }));
+          });
+        }
       } else {
         $('#filter-value-field').html('<input type="text" class="form-control" id="fv" name="fv" size="30">');
       }

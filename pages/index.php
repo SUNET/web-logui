@@ -113,23 +113,28 @@ if (isset($_GET['ff']) && isset($_GET['fo']) && isset($_GET['fv'])) {
 }
 
 function addFilter($field, $operator, $value) {
-  $valid_fields = ['messageid', 'subject', 'from', 'to', 'remoteip', 'status', 'action', 'metadata', 'rpdscore', 'sascore'];
-  $valid_operators = ['exact', 'contains', 'not', '=', '<=', '>=', '<', '>'];
-  if (in_array($field, $valid_fields) && in_array($operator, $valid_operators)) {
-    $duplicate = false;
-    foreach ($_SESSION['filters'][$field] ?? [] as $f) {
-      if ($f['operator'] == $operator && $f['value'] == $value)
-        $duplicate = true;
-    }
+  global $settings;
+  $filterSettings = $settings->getElasticsearchFilters();
 
-    if (!$duplicate) {
-      $_SESSION['filters-id'] = !isset($_SESSION['filters-id']) ? 1 : ++$_SESSION['filters-id'];
-      $_SESSION['filters'][$field][] = [
-        'id' => $_SESSION['filters-id'],
-        'operator' => $operator,
-        'value' => $value
-      ];
-    }
+  if (!$filterSettings[$field] || !in_array($operator, $filterSettings[$field]['operators'] ?? []))
+    return;
+  if (is_array($filterSettings[$field]['values']) && !in_array($value, $filterSettings[$field]['values']))
+    return;
+
+  $duplicate = false;
+  foreach ($_SESSION['filters'][$field] ?? [] as $f) {
+    if ($f['operator'] == $operator && $f['value'] == $value)
+      $duplicate = true;
+  }
+
+  if (!$duplicate) {
+    $_SESSION['filters-id'] = !isset($_SESSION['filters-id']) ? 1 : ++$_SESSION['filters-id'];
+    $_SESSION['filters'][$field][] = [
+      'field' => $field,
+      'id' => $_SESSION['filters-id'],
+      'operator' => $operator,
+      'value' => $value
+    ];
   }
 }
 

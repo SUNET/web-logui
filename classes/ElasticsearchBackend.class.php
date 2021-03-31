@@ -114,6 +114,7 @@ class ElasticsearchBackend extends Backend
       }
 
       if (isset($param['filters'])) {
+        $filterSettings = $settings->getElasticsearchFilters();
         $boolField = new BoolQuery();
         foreach ($param['filters'] as $field => $i) {
           $boolFilter = new BoolQuery();
@@ -127,27 +128,9 @@ class ElasticsearchBackend extends Backend
             } else
               $operator = 'AND';
             switch ($field) {
-              case 'messageid':
-                $boolFilter->add(new MatchQuery($schema['msgid'], $filter['value'], ['operator' => $operator]), $boolOperator);
-                break;
-              case 'subject':
-                $boolFilter->add(new MatchQuery($schema['msgsubject'], $filter['value'], ['operator' => $operator]), $boolOperator);
-                break;
-              case 'from':
-                $boolFilter->add(new MultiMatchQuery([$schema['msgfrom'], $schema['msgfromdomain']], $filter['value'], ['operator' => $operator]), $boolOperator);
-                break;
-              case 'to':
-                $boolFilter->add(new MultiMatchQuery([$schema['msgto'], $schema['msgtodomain']], $filter['value'], ['operator' => $operator]), $boolOperator);
-                break;
               case 'remoteip':
                 if (inet_pton($filter['value']))
-                  $boolFilter->add(new MatchQuery($schema['msgfromserver'], $filter['value'], ['operator' => 'AND']), $boolOperator);
-                break;
-              case 'status':
-                $status = new BoolQuery();
-                $status->add(new MatchQuery($schema['msgdescription'], $filter['value'], ['operator' => $operator]), BoolQuery::SHOULD);
-                $status->add(new MatchQuery($schema['queue']['key'].'.'.$schema['queue']['value']['errormsg'], $filter['value'], ['operator' => $operator]), BoolQuery::SHOULD);
-                $boolFilter->add($status, $boolOperator);
+                  $boolFilter->add(new MatchQuery($filter['filter']['mapping'], $filter['value'], ['operator' => 'AND']), $boolOperator);
                 break;
               case 'action':
                 if (strtoupper($filter['value']) == 'QUEUE') {
@@ -161,28 +144,6 @@ class ElasticsearchBackend extends Backend
                 } else {
                   $boolFilter->add(new MultiMatchQuery([$schema['msgaction'], $schema['queue']['key'].'.'.$schema['queue']['value']['action']], $filter['value'], ['operator' => 'AND']), $boolOperator);
                 }
-                break;
-              case 'metadata':
-                $boolFilter->add(new MultiMatchQuery([$schema['metadata'].'.*'], $filter['value'], ['operator' => $operator]), $boolOperator);
-                break;
-              case 'rpdscore':
-                switch ($filter['value']) {
-                  case 'spam':
-                    $score = 100;
-                    break;
-                  case 'bulk':
-                    $score = 50;
-                    break;
-                  case 'valid-bulk':
-                    $score = 40;
-                    break;
-                  case 'suspect':
-                    $score = 10;
-                    break;
-                  default:
-                    $score = 0;
-                }
-                $boolFilter->add(new MatchQuery($schema['score_rpd'], $score, ['operator' => $operator]), $boolOperator);
                 break;
               case 'sascore':
                 if ($filter['operator'] == '=') {
@@ -203,6 +164,12 @@ class ElasticsearchBackend extends Backend
                 $boolFilter->add($sa, $boolOperator);
                 break;
               default:
+                if ($filterSettings[$filter['field']]['mapping']) {
+                  if (is_array($filterSettings[$filter['field']]['mapping']))
+                    $boolFilter->add(new MultiMatchQuery($filterSettings[$filter['field']]['mapping'], $filter['value'], ['operator' => $operator]), $boolOperator);
+                  else if (is_string($filterSettings[$filter['field']]['mapping']))
+                    $boolFilter->add(new MatchQuery($filterSettings[$filter['field']]['mapping'], $filter['value'], ['operator' => $operator]), $boolOperator);
+                }
                 continue;
             }
           }

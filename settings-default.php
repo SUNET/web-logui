@@ -118,6 +118,64 @@
 // ];
 
 /*
+ * Default elasticsearch filters
+ * Adjust the public filter options on the messages page.
+ */
+// $settings['elasticsearch-filters'] = [
+//   'messageid' => [
+//     'label' => 'Message ID',
+//     'operators' => ['exact', 'not'],
+//     'mapping' => 'messageid'
+//   ],
+//   'subject' => [
+//     'label' => 'Subject',
+//     'operators' => ['exact', 'contains', 'not'],
+//     'mapping' => 'subject'
+//   ],
+//   'from' => [
+//     'label' => 'From',
+//     'operators' => ['exact', 'contains', 'not'],
+//     'mapping' => ['sender', 'senderdomain']
+//   ],
+//   'to' => [
+//     'label' => 'To',
+//     'operators' => ['exact', 'contains', 'not'],
+//     'mapping' => ['recipient', 'recipientdomain']
+//   ],
+//   'remoteip' => [
+//     'label' => 'Remote IP',
+//     'operators' => ['exact', 'not'],
+//     'mapping' => 'senderip'
+//   ],
+//   'status' => [
+//     'label' => 'Status',
+//     'operators' => ['exact', 'contains', 'not'],
+//     'mapping' => ['reason', 'queue.errormsg']
+//   ],
+//   'action' => [
+//     'label' => 'Action',
+//     'operators' => ['exact', 'not'],
+//     'values' => ['DELIVER', 'QUEUE', 'QUARANTINE', 'ARCHIVE', 'REJECT', 'DELETE', 'BOUNCE', 'ERROR', 'DEFER']
+//   ],
+//   'metadata' => [
+//     'label' => 'Metadata',
+//     'operators' => ['exact', 'contains', 'not'],
+//     'mapping' => ['metadata.*']
+//   ],
+//   'rpdscore' => [
+//     'label' => 'RPD score',
+//     'operators' => ['exact', 'not'],
+//     'values' => ['spam' => 100, 'bulk' => 50, 'valid-bulk' => 40, 'suspect' => 10, 'non-spam' => 0],
+//     'mapping' => 'score_rpd'
+//   ],
+//   'sascore' => [
+//     'label' => 'SpamAssassin score',
+//     'operators' => ['=', '<=', '>=', '<', '>'],
+//     'mapping' => 'scores.sa'
+//   ]
+// ];
+
+/*
  * Metadata filter, only fetch values when key matches (preg_match)
  */
 

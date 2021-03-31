@@ -213,6 +213,11 @@ if ($_POST['page'] == 'messages') {
     $indices = str_replace($settings->getElasticsearch()->getIndex(), '', Session::Get()->getElasticsearchIndices());
     die(json_encode(['indices' => $indices]));
   }
+
+  if ($_POST['type'] == 'filters') {
+    $filterSettings = $settings->getElasticsearchFilters();
+    die(json_encode(['filters' => $filterSettings]));
+  }
 }
 
 die(json_encode(array('error' => 'unsupported request')));

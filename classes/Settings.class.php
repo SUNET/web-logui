@@ -88,6 +88,59 @@ class Settings
     ],
     'metadata' => 'metadata'
   ];
+  private $elasticsearchFilters = [
+    'messageid' => [
+      'label' => 'Message ID',
+      'operators' => ['exact', 'not'],
+      'mapping' => 'messageid'
+    ],
+    'subject' => [
+      'label' => 'Subject',
+      'operators' => ['exact', 'contains', 'not'],
+      'mapping' => 'subject'
+    ],
+    'from' => [
+      'label' => 'From',
+      'operators' => ['exact', 'contains', 'not'],
+      'mapping' => ['sender', 'senderdomain']
+    ],
+    'to' => [
+      'label' => 'To',
+      'operators' => ['exact', 'contains', 'not'],
+      'mapping' => ['recipient', 'recipientdomain']
+    ],
+    'remoteip' => [
+      'label' => 'Remote IP',
+      'operators' => ['exact', 'not'],
+      'mapping' => 'senderip'
+    ],
+    'status' => [
+      'label' => 'Status',
+      'operators' => ['exact', 'contains', 'not'],
+      'mapping' => ['reason', 'queue.errormsg']
+    ],
+    'action' => [
+      'label' => 'Action',
+      'operators' => ['exact', 'not'],
+      'values' => ['DELIVER', 'QUEUE', 'QUARANTINE', 'ARCHIVE', 'REJECT', 'DELETE', 'BOUNCE', 'ERROR', 'DEFER']
+    ],
+    'metadata' => [
+      'label' => 'Metadata',
+      'operators' => ['exact', 'contains', 'not'],
+      'mapping' => ['metadata.*']
+    ],
+    'rpdscore' => [
+      'label' => 'RPD score',
+      'operators' => ['exact', 'not'],
+      'values' => ['spam' => 100, 'bulk' => 50, 'valid-bulk' => 40, 'suspect' => 10, 'non-spam' => 0],
+      'mapping' => 'score_rpd'
+    ],
+    'sascore' => [
+      'label' => 'SpamAssassin score',
+      'operators' => ['=', '<=', '>=', '<', '>'],
+      'mapping' => 'scores.sa'
+    ]
+  ];
   private $elasticsearchMetadataFilter = null;
 
   private $statsSettings = [];
@@ -167,6 +220,7 @@ class Settings
     if (count($mappings) > 0)
       $this->elasticsearchMappings = array_merge($this->elasticsearchMappings, $mappings);
     $this->extract($this->elasticsearchMetadataFilter, 'elasticsearch-metadata-filter');
+    $this->extract($this->elasticsearchFilters, 'elasticsearch-filters');
 
     if(!$this->publicURL)
     {
@@ -221,6 +275,10 @@ class Settings
 
   public function getElasticsearchMetadataFilter() {
     return $this->elasticsearchMetadataFilter;
+  }
+
+  public function getElasticsearchFilters() {
+    return $this->elasticsearchFilters;
   }
 
   /**
