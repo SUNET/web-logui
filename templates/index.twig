@@ -217,6 +217,7 @@
                 </th>
               {% endif %}
             {% endfor %}
+            <th style="width: 25px"></th>
           </tr>
         </thead>
         <tbody>
@@ -305,6 +306,11 @@
                 </td>
               {% endif %}
             {% endfor %}
+            <td>
+              {% if mail.doc.metadata.file_1_name is defined %}
+                <i class="fas fa-paperclip text-muted"></i>
+              {% endif %}
+            </td>
           </tr>
           {% endfor %}
         </tbody>
