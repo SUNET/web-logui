@@ -8,12 +8,12 @@ $statsSettings['color'] = [
   "rgba(130, 174, 245, $alpha)",
   "rgba(255, 99, 132, $alpha)",
   "rgba(255, 159, 64, $alpha)",
-  "rgba(255, 205, 86, $alpha)",
-  "rgba(75, 192, 192, $alpha)",
   "rgba(54, 162, 235, $alpha)",
   "rgba(153, 102, 255, $alpha)",
+  "rgba(255, 205, 86, $alpha)",
   "rgba(201, 203, 207, $alpha)",
   "rgba(136, 237, 101, $alpha)",
+  "rgba(75, 192, 192, $alpha)",
   "rgba(237, 88, 110, $alpha)",
   "rgba(237, 133, 218, $alpha)"
 ];
@@ -36,6 +36,37 @@ $statsSettings['label-color'] = [
   ],
   'bandwidth' => [
     'bg' => "rgba(134, 52, 113, $alpha)"
+  ],
+  'non-spam' => [
+    'bg' => "rgba(136, 237, 101, $alpha)"
+  ],
+  // reject reason
+  'spf' => [
+    'bg' => "rgba(172, 99, 255, $alpha)"
+  ],
+  'dmarc' => [
+    'bg' => "rgba(118, 69, 173, $alpha)"
+  ],
+  'virus' => [
+    'bg' => "rgba(94, 68, 36, $alpha)"
+  ],
+  'spam' => [
+    'bg' => "rgba(255, 99, 132, $alpha)"
+  ],
+  'bulk' => [
+    'bg' => "rgba(255, 206, 99, $alpha)"
+  ],
+  'dlp' => [
+    'bg' => "rgba(99, 143, 255, $alpha)"
+  ],
+  'blockexe' => [
+    'bg' => "rgba(52, 75, 133, $alpha)"
+  ],
+  'ipreputation' => [
+    'bg' => "rgba(214, 6, 52, $alpha)"
+  ],
+  'nxdomain' => [
+    'bg' => "rgba(99, 99, 99, $alpha)"
   ]
 ];
 
@@ -125,7 +156,169 @@ $statsSettings['aggregations'] = [
           return round($v / 1024 / 1024, 2);
         }
       ]
-    ]
+    ],
+    'rejectreason' => [
+      'label' => 'Reject reason',
+      'groupby' => 'Inbound',
+      'buckets' => [
+        'aggregation' => [
+          'key' => 'time',
+          'type' => 'histogram',
+          'field' => 'receivedtime',
+          'aggregation' => [
+            'key' => 'listener',
+            'type' => 'filters',
+            'filters' => [
+              'inbound' => [
+                'type' => 'phrase',
+                'field' => 'serverid.keyword',
+                'value' => 'mailserver:inbound'
+              ]
+            ],
+            'aggregation' => [
+              'key' => 'reason',
+              'type' => 'filters',
+              'filters' => [
+                'spam' => [
+                  'type' => 'phrase',
+                  'field' => 'metadata.reject-reason.keyword',
+                  'value' => 'spam'
+                ],
+                'bulk' => [
+                  'type' => 'phrase',
+                  'field' => 'metadata.reject-reason.keyword',
+                  'value' => 'bulk'
+                ],
+                'spf' => [
+                  'type' => 'phrase',
+                  'field' => 'metadata.reject-reason.keyword',
+                  'value' => 'spf'
+                ],
+                'dmarc' => [
+                  'type' => 'phrase',
+                  'field' => 'metadata.reject-reason.keyword',
+                  'value' => 'dmarc'
+                ],
+                'ipreputation' => [
+                  'type' => 'phrase',
+                  'field' => 'metadata.reject-reason.keyword',
+                  'value' => 'ipreputation'
+                ],
+                'virus' => [
+                  'type' => 'phrase',
+                  'field' => 'metadata.reject-reason.keyword',
+                  'value' => 'virus'
+                ],
+                'nxdomain' => [
+                  'type' => 'phrase',
+                  'field' => 'metadata.reject-reason.keyword',
+                  'value' => 'nxdomain'
+                ],
+                'blockexe' => [
+                  'type' => 'phrase',
+                  'field' => 'metadata.reject-reason.keyword',
+                  'value' => 'blockexe'
+                ],
+                'dlp' => [
+                  'type' => 'phrase',
+                  'field' => 'metadata.reject-reason.keyword',
+                  'value' => 'dlp'
+                ],
+
+
+              ]
+//              'type' => 'terms',
+//              'field' => 'metadata.reject-reason.keyword'
+            ]
+          ]
+        ]
+      ]
+    ],
+    'action-out' => [
+      'label' => 'Action',
+      'groupby' => 'Outbound',
+      'buckets' => [
+        'aggregation' => [
+          'key' => 'time',
+          'type' => 'histogram',
+          'field' => 'receivedtime',
+          'aggregation' => [
+            'key' => 'listener',
+            'type' => 'filters',
+            'filters' => [
+              'outbound' => [
+                'type' => 'phrase',
+                'field' => 'serverid.keyword',
+                'value' => 'mailserver:outbound'
+              ]
+            ],
+            'aggregation' => [
+              'key' => 'action',
+              'type' => 'filters',
+              'filters' => [
+                'REJECT' => [
+                  'type' => 'phrase',
+                  'field' => 'action.keyword',
+                  'value' => 'REJECT'
+                ],
+                'QUARANTINE' => [
+                  'type' => 'phrase',
+                  'field' => 'action.keyword',
+                  'value' => 'QUARANTINE'
+                ],
+                'DEFER' => [
+                  'type' => 'phrase',
+                  'field' => 'action.keyword',
+                  'value' => 'DEFER'
+                ],
+                'BOUNCE' => [
+                  'type' => 'phrase',
+                  'field' => 'queue.action.keyword',
+                  'value' => 'BOUNCE'
+                ],
+                'DELIVER' => [
+                  'type' => 'phrase',
+                  'field' => 'queue.action.keyword',
+                  'value' => 'DELIVER'
+                ]
+              ]
+            ]
+          ]
+        ]
+      ]
+    ],
+    'bandwidth-out' => [
+      'label' => 'Bandwidth usage - MiB',
+      'groupby' => 'Outbound',
+      'splitseries' => false,
+      'legend' => 'bandwidth',
+      'buckets' => [
+        'aggregation' => [
+          'key' => 'time',
+          'type' => 'histogram',
+          'field' => 'receivedtime',
+          'aggregation' => [
+            'key' => 'listener',
+            'type' => 'filters',
+            'filters' => [
+              'outbound' => [
+                'type' => 'phrase',
+                'field' => 'serverid.keyword',
+                'value' => 'mailserver:outbound'
+              ]
+            ]
+          ]
+        ]
+      ],
+      'metrics' => [
+        'key' => 'bandwidth',
+        'type' => 'sum',
+        'field' => 'size',
+        'format' => function ($v) {
+          return round($v / 1024 / 1024, 2);
+        }
+      ]
+    ],
   ],
   'bar' => [
     'senderip' => [
@@ -249,31 +442,78 @@ $statsSettings['aggregations'] = [
         ]
       ]
     ],
-    'bandwidth' => [
-      'label' => 'Bandwidth usage - MiB',
-      'groupby' => 'Inbound',
+    'localrelayip' => [
+      'label' => 'Local Relay IP\'s',
+      'groupby' => 'Top (Outbound)',
       'buckets' => [
         'aggregation' => [
           'key' => 'listener',
           'type' => 'filters',
           'filters' => [
-            'inbound' => [
+            'outbound' => [
               'type' => 'phrase',
               'field' => 'serverid.keyword',
-              'value' => 'mailserver:inbound'
+              'value' => 'mailserver:outbound'
             ]
+          ],
+          'aggregation' => [
+            'key' => 'ip',
+            'type' => 'terms',
+            'field' => 'senderip',
+            'size' => 10,
+            'sort' => 'desc',
           ]
         ]
-      ],
-      'metrics' => [
-        'key' => 'bandwidth',
-        'type' => 'sum',
-        'field' => 'size',
-        'format' => function ($v) {
-          return round($v / 1024 / 1024, 2);
-        }
       ]
-    ]
+    ],
+    'senders-outbound' => [
+      'label' => 'Senders',
+      'groupby' => 'Top (Outbound)',
+      'buckets' => [
+        'aggregation' => [
+          'key' => 'listener',
+          'type' => 'filters',
+          'filters' => [
+            'outbound' => [
+              'type' => 'phrase',
+              'field' => 'serverid.keyword',
+              'value' => 'mailserver:outbound'
+            ]
+          ],
+          'aggregation' => [
+            'key' => 'senders',
+            'type' => 'terms',
+            'field' => 'sender.keyword',
+            'size' => 10,
+            'sort' => 'desc'
+          ]
+        ]
+      ]
+    ],
+    'recipients-outbound' => [
+      'label' => 'Recipients',
+      'groupby' => 'Top (Outbound)',
+      'buckets' => [
+        'aggregation' => [
+          'key' => 'listener',
+          'type' => 'filters',
+          'filters' => [
+            'outbound' => [
+              'type' => 'phrase',
+              'field' => 'serverid.keyword',
+              'value' => 'mailserver:outbound'
+            ]
+          ],
+          'aggregation' => [
+            'key' => 'recipients',
+            'type' => 'terms',
+            'field' => 'recipient.keyword',
+            'size' => 10,
+            'sort' => 'desc'
+          ]
+        ]
+      ]
+    ],
   ],
   'pie' => [
     'action' => [
@@ -371,7 +611,29 @@ $statsSettings['aggregations'] = [
           ]
         ]
       ]
-    ]
+    ],
+    'rejectreason' => [
+      'label' => 'Reject reason',
+      'groupby' => 'Inbound',
+      'buckets' => [
+        'aggregation' => [
+          'key' => 'listener',
+          'type' => 'filters',
+          'filters' => [
+            'inbound' => [
+              'type' => 'phrase',
+              'field' => 'serverid.keyword',
+              'value' => 'mailserver:inbound'
+            ]
+          ],
+          'aggregation' => [
+            'key' => 'reason',
+            'type' => 'terms',
+            'field' => 'metadata.reject-reason.keyword'
+          ]
+        ]
+      ]
+    ],
   ]
 ];
 
