@@ -20,7 +20,7 @@ if (!$mail)
   die('Invalid mail');
 
 // If in queue or quarantine, try to fetch mail over REST
-if (isset($mail->serialno) && in_array($msgaction, ['QUEUE', 'QUARANTINE'])) {
+if (isset($mail->serialno) && in_array($msgaction, ['QUARANTINE'])) {
   $dbh = $settings->getDatabase();
   if ($dbh) {
     $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
