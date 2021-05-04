@@ -38,6 +38,18 @@ $action_colors = array(
   'DEFER' => '#e83e8c',
 );
 
+$action_icons = array(
+	'DELIVER' => 'fas fa-check',
+	'QUEUE' => 'fas fa-exchange-alt',
+	'QUARANTINE' => 'fas fa-inbox',
+	'ARCHIVE' => 'fas fa-inbox',
+	'REJECT' => 'fas fa-ban',
+	'DELETE' => 'far fa-trash-alt',
+	'BOUNCE' => 'fas fa-reply',
+	'ERROR' => 'fas fa-exclamation',
+	'DEFER' => 'far fa-clock',
+);
+
 function get_preview_link($m, $opts = [])
 {
   return '?'.http_build_query(array(
@@ -183,8 +195,9 @@ foreach ($results as $m) {
 
   $mail['preview'] = $preview;
   $mail['previewlink'] = get_preview_link($m, ['index' => $m['index']]);
-  $mail['action_text'] = substr($m['doc']->queue['action'] ?? $m['doc']->msgaction, 0, 1);
-  $mail['action_color'] = $action_colors[$m['doc']->queue['action'] ?? $m['doc']->msgaction];
+  $mail['action'] = $m['doc']->queue['action'] ?? $m['doc']->msgaction;
+  $mail['action_color'] = $action_colors[$mail['action']];
+  $mail['action_icon'] = $action_icons[$mail['action']];
   if ($settings->getDisplayScores()) {
     $printscores = array();
     $scores = history_parse_scores($m['doc']);

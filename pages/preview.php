@@ -159,6 +159,18 @@ $action_colors = array(
   'DEFER' => '#e83e8c',
 );
 
+$action_icons = array(
+	'DELIVER' => 'fas fa-check',
+	'QUEUE' => 'fas fa-exchange-alt',
+	'QUARANTINE' => 'fas fa-inbox',
+	'ARCHIVE' => 'fas fa-inbox',
+	'REJECT' => 'fas fa-ban',
+	'DELETE' => 'far fa-trash-alt',
+	'BOUNCE' => 'fas fa-reply',
+	'ERROR' => 'fas fa-exclamation',
+	'DEFER' => 'far fa-clock',
+);
+
 // geoip
 if ($settings->getGeoIP()) {
   try {

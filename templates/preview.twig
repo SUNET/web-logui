@@ -83,7 +83,7 @@
     <div class="row mb-2">
       <div class="col">
         <h5 class="font-weight-light">
-          <span class="badge mr-2" style="vertical-align: text-top; margin-top: 0px; background-color: {{ action_color }}; color: #fff" title="{{ mail.queue.action ?? mail.msgaction }}">{{ msg_action }}</span><span>{{mail.msgid}}</span>
+          <span class="badge mr-2" style="vertical-align: text-top; margin-top: 0px; background-color: {{ action_color }}; color: #fff" title="{{ mail.queue.action ?? mail.msgaction }}"><i class="{{ action_icon }} fa-fw"></i> {{ msg_action }}</span><span>{{mail.msgid}}</span>
         </h5>
       </div>
     </div>
