@@ -148,6 +148,9 @@ preview:
         transport: 'Destination'
         id: 'ID'
         tlsstarted: 'TLS has been used in receiving this message'
+        queue:
+          retry: 'Retry count'
+          reason: 'Retry reason'
     scores:
       title: 'Scores'
       thead:

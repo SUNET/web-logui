@@ -105,16 +105,15 @@
               <dt>{% trans %}preview.card.details.fields.recipient{% endtrans %}</dt><dd class="wrap">{{ mail.msgto }}</dd>
               <dt>{% trans %}preview.card.details.fields.subject{% endtrans %}</dt><dd class="wrap">{{ mail.msgsubject }}</dd>
               <dt>{% trans %}preview.card.details.fields.size{% endtrans %}</dt><dd class="wrap" title="{{ mail.msgsize }} bytes">{{ mail.msgsize }} B</dd>
-              <dt>{% trans %}preview.card.details.fields.details{% endtrans %}</dt>
-              <dd>
-                {% if mail.queue.action %}
-                  {{ mail.queue.errormsg }}
-                {% elseif mail.doc.msgaction == 'QUEUE' %}
-                  {% trans with {'%count%': mail.retry ? mail.retry : 0 } %}index.table.tbody.msgaction.queue{% endtrans %} <span class="text-muted">{{ mail.queue.errormsg }}</span>
-                {% else %}
+              {% if mail.queue.action == 'QUEUE' or (mail.msgaction == 'QUEUE' and mail.queue.action is null) %}
+                <dt>{% trans %}preview.card.details.fields.queue.retry{% endtrans %}</dt><dd>{{ mail.queue.retry ?? 0 }}</dd>
+                <dt>{% trans %}preview.card.details.fields.queue.reason{% endtrans %}</dt><dd>{{ mail.queue.errormsg ?? 'In queue' }}</dd>
+              {% else %}
+                <dt>{% trans %}preview.card.details.fields.details{% endtrans %}</dt>
+                <dd>
                   {{ mail.msgdescription }}
-                {% endif %}
-              </dd>
+                </dd>
+              {% endif %}
               {% if mail.msgsasl %}
                 <dt>{% trans %}preview.card.details.fields.user{% endtrans %}</dt><dd>{{ mail.msgsasl }}</dd>
               {% endif %}

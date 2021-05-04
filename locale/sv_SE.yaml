@@ -148,6 +148,9 @@ preview:
         transport: 'Destination'
         id: 'ID'
         tlsstarted: 'TLS har använts vid mottagande av detta brev'
+        queue:
+          retry: 'Antal försök'
+          reason: 'Orsak'
     scores:
       title: 'Poäng'
       thead:
