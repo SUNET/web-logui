@@ -130,7 +130,7 @@ class ElasticsearchBackend extends Backend
             switch ($field) {
               case 'remoteip':
                 if (inet_pton($filter['value']))
-                  $boolFilter->add(new MatchQuery($filter['filter']['mapping'], $filter['value'], ['operator' => 'AND']), $boolOperator);
+                  $boolFilter->add(new MatchQuery($filterSettings[$filter['field']]['mapping'], $filter['value'], ['operator' => 'AND']), $boolOperator);
                 break;
               case 'action':
                 if (strtoupper($filter['value']) == 'QUEUE') {
