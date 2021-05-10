@@ -111,7 +111,7 @@
               {% else %}
                 <dt>{% trans %}preview.card.details.fields.details{% endtrans %}</dt>
                 <dd>
-                  {{ mail.msgdescription }}
+                  {{ mail.queue.errormsg ?? mail.msgdescription }}
                 </dd>
               {% endif %}
               {% if mail.msgsasl %}
