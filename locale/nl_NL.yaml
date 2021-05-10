@@ -148,6 +148,9 @@ preview:
         transport: 'Bestemming'
         id: 'ID'
         tlsstarted: 'TLS is gebruikt met het ontvangen van dit bericht'
+        queue:
+          retry: 'Aantal pogingen'
+          reason: 'Reden'
     scores:
       title: 'Score'
       thead:
