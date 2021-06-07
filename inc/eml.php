@@ -117,7 +117,7 @@ function eml_download($client, $hqfpath, $queueid = 1, $original = false, $strin
 					}
 					if ($hqfTLV['len'])
 					{
-						$data  = '';
+						$data = '';
 						$readUntil($client, $hqfpath, $offset, $maxread, function ($d) use (&$data) {
 								$data .= $d;
 								}, $offset + $hqfTLV['len']);
@@ -199,7 +199,8 @@ function eml_download($client, $hqfpath, $queueid = 1, $original = false, $strin
 	}
 	if ($hqfHeader['version_major'] == 2)
 	{
-		$until = $hqfHeader['emlsize'] + 13;
+		$emlsize = $hqfHeader['emlsize'];
+		$until = $emlsize + 13;
 
 		if ($original) {
 			if ($string) {
@@ -252,7 +253,7 @@ function eml_download($client, $hqfpath, $queueid = 1, $original = false, $strin
 					}
 					if ($hqfTLV['len'])
 					{
-						$data  = '';
+						$data = '';
 						$readUntil($client, $hqfpath, $offset, $maxread, function ($d) use (&$data) {
 								$data .= $d;
 								}, $offset + $hqfTLV['len']);
@@ -289,7 +290,7 @@ function eml_download($client, $hqfpath, $queueid = 1, $original = false, $strin
 
 			if (!$string)
 			{
-				$size = $hqfHeader['emlsize'] + $deltasizediff;
+				$size = $emlsize + $deltasizediff;
 				header("Content-Length: $size");
 			}
 
