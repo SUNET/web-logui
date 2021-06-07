@@ -110,6 +110,17 @@ function bar_chart(targetElement, labels = null, datasets = null) {
           ticks: {
             beginAtZero: true
           }
+        }],
+        xAxes: [{
+          ticks: {
+            callback: function(value) {
+              var max = 30;
+              if (value.length > max)
+                return value.substr(0, max) + ' ...';
+              else
+                return value;
+            }
+          }
         }]
       }
     }
