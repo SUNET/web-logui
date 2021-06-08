@@ -380,7 +380,12 @@ class ElasticsearchBackend extends Backend
       $bucket['key'] ?? ++$i,
       $bucket['field'] ?? null,
       $bucket['filters'] ?? null,
-      ['size' => $bucket['size'] ?? null, 'sort' => $bucket['sort'] ?? null, 'interval' => $interval]
+      [
+        'size' => $bucket['size'] ?? null,
+        'sort' => $bucket['sort'] ?? null,
+        'interval' => $interval,
+        'exclude' => $bucket['exclude'] ?? null
+      ]
     );
 
     if (isset($bucket['aggregation']))
@@ -399,6 +404,8 @@ class ElasticsearchBackend extends Backend
           $termsAggregation->addParameter('order', ['_count' => $opts['sort']]);
         if (isset($opts['size']))
           $termsAggregation->addParameter('size', $opts['size']);
+        if (is_string($opts['exclude']) || is_array($opts['exclude']))
+          $termsAggregation->addParameter('exclude', $opts['exclude']);
         return $termsAggregation;
       case 'filters':
         $filterAgg = [];
