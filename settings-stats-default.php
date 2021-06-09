@@ -288,13 +288,23 @@ $statsSettings['aggregations']['bar'] = [
       ])
       ->toArray()
   ],
-  'virus' => [
-    'label' => 'Viruses',
+  'virus_sophos' => [
+    'label' => 'Viruses (Sophos)',
     'groupby' => 'Top (Inbound)',
     'buckets' => (new StatsBucket())
       ->addAggregation($statsAgg['listener']['in'])
       ->addAggregation([
-        'key' => 'virus', 'type' => 'terms', 'field' => 'scores_av.keyword'
+        'key' => 'virus', 'type' => 'terms', 'field' => 'scores.kav.keyword', 'exclude' => ['']
+      ])
+      ->toArray()
+  ],
+  'virus_clam' => [
+    'label' => 'Viruses (ClamAV)',
+    'groupby' => 'Top (Inbound)',
+    'buckets' => (new StatsBucket())
+      ->addAggregation($statsAgg['listener']['in'])
+      ->addAggregation([
+        'key' => 'virus', 'type' => 'terms', 'field' => 'scores.clam.keyword', 'exclude' => ['']
       ])
       ->toArray()
   ],
