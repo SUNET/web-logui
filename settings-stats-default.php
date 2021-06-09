@@ -288,6 +288,16 @@ $statsSettings['aggregations']['bar'] = [
       ])
       ->toArray()
   ],
+  'virus' => [
+    'label' => 'Viruses',
+    'groupby' => 'Top (Inbound)',
+    'buckets' => (new StatsBucket())
+      ->addAggregation($statsAgg['listener']['in'])
+      ->addAggregation([
+        'key' => 'virus', 'type' => 'terms', 'field' => 'scores_av.keyword'
+      ])
+      ->toArray()
+  ],
   'bandwidth' => [
     'label' => 'Bandwidth usage - MiB',
     'groupby' => 'Inbound',
