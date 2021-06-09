@@ -8,29 +8,13 @@ require_once BASE.'/inc/twig.php';
 
 $stats = $settings->getStatsAggregations();
 
-uasort($stats['line'], function ($a, $b) {
-  if (!isset($a['groupby']))
-    return -1;
-  if ($a['groupby'] == $b['groupby'])
-    return 0;
-  return -1;
-});
+function SortByGroup($a, $b) {
+  return strcmp($a['groupby'] ?? '', $b['groupby'] ?? '');
+}
 
-uasort($stats['bar'], function ($a, $b) {
-  if (!isset($a['groupby']))
-    return -1;
-  if ($a['groupby'] == $b['groupby'])
-    return 0;
-  return 1;
-});
-
-uasort($stats['pie'], function ($a, $b) {
-  if (!isset($a['groupby']))
-    return -1;
-  if ($a['groupby'] == $b['groupby'])
-    return 0;
-  return 1;
-});
+uasort($stats['line'], 'SortByGroup');
+uasort($stats['bar'], 'SortByGroup');
+uasort($stats['pie'], 'SortByGroup');
 
 $twigLocals = [
   'access'      => Session::Get()->getAccess(),
