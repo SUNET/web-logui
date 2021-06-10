@@ -81,8 +81,8 @@ function addChart(id, chart, type, target = '', width = '') {
 	var cardHeader = $('<div class="card-header" draggable="true"></div>').appendTo(card);
 	var cardHeaderRow = $('<div class="row"></div>').appendTo(cardHeader);
 
-	var cardTitle = $('<div class="col-9 chart-title text-truncate"></div>').appendTo(cardHeaderRow);
-	var cardToolbar = $('<div class="col-3 chart-toolbar"></div>').appendTo(cardHeaderRow);
+	var cardTitle = $('<div class="col-8 chart-title text-truncate"></div>').appendTo(cardHeaderRow);
+	var cardToolbar = $('<div class="col-4 chart-toolbar"></div>').appendTo(cardHeaderRow);
 
 	cardInputGroup = $('<div class="input-group chart-edit" style="position: absolute; top: -4px; right: 4px;" hidden></div>').appendTo(cardToolbar);
 	cardInputGroupAppend = $('<div class="input-group-append"></div>').appendTo(cardInputGroup);
@@ -98,8 +98,8 @@ function addChart(id, chart, type, target = '', width = '') {
 
 		$('#save-changes').attr('hidden', false);
 
-		$(cardTitle).removeClass('col-6').addClass('col-9');
-		$(cardToolbar).removeClass('col-6').addClass('col-3');
+		$(cardTitle).removeClass('col-6').addClass('col-8');
+		$(cardToolbar).removeClass('col-6').addClass('col-4');
 		$('#chart-' + $(this).data('id')).find('.chart-edit').prop('hidden', true);
 		$('#chart-' + $(this).data('id')).find('.btn-card-edit').prop('hidden', false);
 		$('#chart-' + $(this).data('id')).find('.btn-card-close').prop('hidden', false);
@@ -120,8 +120,8 @@ function addChart(id, chart, type, target = '', width = '') {
 
 	// domain button
 	$('<button type="button" class="btn btn-link p-0 float-right text-secondary mr-2 btn-card-edit" title="Filter" data-id="' + id + '"><i class="fas fa-filter"></i></a>').on('click', function () {
-		$(cardTitle).removeClass('col-9').addClass('col-6');
-		$(cardToolbar).removeClass('col-3').addClass('col-6');
+		$(cardTitle).removeClass('col-8').addClass('col-6');
+		$(cardToolbar).removeClass('col-4').addClass('col-6');
 		$('#chart-' + $(this).data('id')).find('.btn-card-edit').prop('hidden', true);
 		$('#chart-' + $(this).data('id')).find('.btn-card-close').prop('hidden', true);
 		$('#chart-' + $(this).data('id')).find('.btn-card-expand').prop('hidden', true);
@@ -129,8 +129,21 @@ function addChart(id, chart, type, target = '', width = '') {
 		$('#chart-' + $(this).data('id')).find('.chart-edit').prop('hidden', false);
 		$('#chart-' + $(this).data('id')).find('.chart-input').focus();
 	}).prependTo(cardToolbar);
+	// download button
+	$('<button type="button" class="btn btn-link p-0 float-right text-secondary mr-2 btn-card-export" title="Download"><i class="fa fa-download"></i></button>').on('click', function () {
+		var chart = chartList[id];
+		if (chart) {
+			var img = chart.toBase64Image();
+			var download = document.createElement('a');
+			download.setAttribute('href', encodeURI(img));
+			download.setAttribute('download', 'export.png');
+			document.body.appendChild(download);
+			download.click();
+			download.remove();
+		}
+	}).prependTo(cardToolbar);
 	// export button
-	$('<button type="button" class="btn btn-link p-0 float-right text-secondary mr-2 btn-card-export" title="Export to CSV"><i class="fa fa-file-download"></i></button>').on('click', function () {
+	$('<button type="button" class="btn btn-link p-0 float-right text-secondary mr-2 btn-card-export" title="Export to CSV"><i class="fa fa-file-export"></i></button>').on('click', function () {
 		var data = chartListData[id];
 		if (data) {
 			var csvExport = 'data:text/csv;charset=utf-8,';
