@@ -241,12 +241,12 @@ function setChartData(id, chart, type, target, dataOnly = false) {
 				time_chart_update(this.chartList[id], data.datasets, data.interval, false);
 		}	else if (chart === 'bar') {
 			if (typeof this.chartList[id] == 'undefined')
-				this.chartList[id] = bar_chart($('#chart-canvas-' + id), data.labels, data.datasets);
+				this.chartList[id] = bar_chart($('#chart-canvas-' + id), data.labels, data.datasets, data.variant);
 			else
 				chart_update(this.chartList[id], data.labels, data.datasets, false);
 		} else if (chart === 'pie') {
 			if (typeof this.chartList[id] == 'undefined')
-				this.chartList[id] = pie_chart($('#chart-canvas-' + id), data.labels, data.datasets);
+				this.chartList[id] = pie_chart($('#chart-canvas-' + id), data.labels, data.datasets, data.variant);
 			else
 				chart_update(this.chartList[id], data.labels, data.datasets, false);
 		}

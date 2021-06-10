@@ -1,3 +1,11 @@
+var truncate_index = function (value) {
+  var max = 30;
+  if (value.length > max)
+    return value.substr(0, max) + ' ...';
+  else
+    return value;
+}
+
 function time_chart_update(chart, datasets, interval, animation = true) {
   var unit = getUnitByInterval(interval);
 
@@ -83,9 +91,18 @@ function time_chart(targetElement, datasets = null, interval = null) {
   return chart;
 }
 
-function pie_chart(targetElement, labels = null, datasets = null) {
+function pie_chart(targetElement, labels = null, datasets = null, variant = null) {
+  var type = '';
+  switch (variant) {
+    case 'doughnut':
+      type = 'doughnut';
+      break;
+    default:
+      type = 'pie';
+  }
+
   var chart = new Chart(targetElement, {
-    type: 'doughnut',
+    type: type,
     data: {
       labels: [],
       datasets: []
@@ -97,29 +114,36 @@ function pie_chart(targetElement, labels = null, datasets = null) {
   return chart;
 }
 
-function bar_chart(targetElement, labels = null, datasets = null) {
+function bar_chart(targetElement, labels = null, datasets = null, variant = null) {
+  var type = '';
+  switch (variant) {
+    case 'horizontal':
+      type = 'horizontalBar';
+      break;
+    default:
+      type = 'bar';
+  }
+
   var chart = new Chart(targetElement, {
-    type: 'bar',
+    type: type,
     data: {
       labels: [],
       datasets: []
     },
     options: {
+      legend: {
+        display: datasets.length > 1
+      },
       scales: {
         yAxes: [{
           ticks: {
-            beginAtZero: true
+            beginAtZero: true,
+            callback: truncate_index
           }
         }],
         xAxes: [{
           ticks: {
-            callback: function(value) {
-              var max = 30;
-              if (value.length > max)
-                return value.substr(0, max) + ' ...';
-              else
-                return value;
-            }
+            callback: truncate_index
           }
         }]
       }

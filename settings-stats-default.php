@@ -281,6 +281,7 @@ $statsSettings['aggregations']['bar'] = [
   'subject' => [
     'label' => 'Subjects',
     'groupby' => 'Top (Inbound)',
+    'variant' => 'horizontal',
     'buckets' => (new StatsBucket())
       ->addAggregation($statsAgg['listener']['in'])
       ->addAggregation([
@@ -333,6 +334,7 @@ $statsSettings['aggregations']['pie'] = [
   'action' => [
     'label' => 'Action type',
     'groupby' => 'Inbound',
+    'variant' => 'doughnut',
     'buckets' => (new StatsBucket())
       ->addAggregation($statsAgg['listener']['in'])
       ->addAggregation($statsAgg['action'])
@@ -341,6 +343,7 @@ $statsSettings['aggregations']['pie'] = [
   'classification' => [
     'label' => 'Spam classification',
     'groupby' => 'Inbound',
+    'variant' => 'pie',
     'buckets' => (new StatsBucket())
       ->addAggregation($statsAgg['listener']['in'])
       ->addAggregation($statsAgg['classifications'])

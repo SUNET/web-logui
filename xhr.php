@@ -148,10 +148,23 @@ if ($_POST['page'] == 'stats')
       }
 
       if (count($chartdata) > 0)
-        die(json_encode(['label' => $map['label'] ?? '', 'group' => $map['groupby'] ?? '', 'labels' => $labels, 'datasets' => [$chartdata]]));
+        die(json_encode([
+          'label' => $map['label'] ?? '',
+          'group' => $map['groupby'] ?? '',
+          'variant' => $map['variant'] ?? '',
+          'labels' => $labels,
+          'datasets' => [$chartdata]
+        ]));
       else
-        die(json_encode(['label' => $map['label'] ?? '', 'group' => $map['groupby'] ?? '', 'labels' => [], 'datasets' => []]));
-    } catch (Exception $e) {}
+        die(json_encode([
+          'label' => $map['label'] ?? '',
+          'group' => $map['groupby'] ?? '',
+          'labels' => [],
+          'datasets' => []
+        ]));
+    } catch (Exception $e) {
+      die(json_encode(['error' => ""]));
+    }
   }
 
   if ($_POST['chart'] == 'line' && isset($_POST['type'])) {
