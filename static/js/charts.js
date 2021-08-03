@@ -136,12 +136,14 @@ function bar_chart(targetElement, labels = null, datasets = null, variant = null
       },
       scales: {
         yAxes: [{
+          stacked: true,
           ticks: {
             beginAtZero: true,
             callback: truncate_index
           }
         }],
         xAxes: [{
+          stacked: true,
           ticks: {
             callback: truncate_index
           }

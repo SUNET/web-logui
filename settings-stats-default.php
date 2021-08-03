@@ -223,8 +223,9 @@ $statsSettings['aggregations']['bar'] = [
     'buckets' => (new StatsBucket())
       ->addAggregation($statsAgg['listener']['in'])
       ->addAggregation(
-        array_merge($statsAgg['senderdomain'], [ 'size' => 10, 'sort' => 'desc' ])
+        array_merge($statsAgg['senderdomain'], [ 'size' => 10, 'sort' => 'desc', 'xaxis' => true ])
       )
+      ->addAggregation($statsAgg['action'])
       ->toArray()
   ],
   'senders' => [
@@ -233,8 +234,9 @@ $statsSettings['aggregations']['bar'] = [
     'buckets' => (new StatsBucket())
       ->addAggregation($statsAgg['listener']['in'])
       ->addAggregation(
-        array_merge($statsAgg['sender'], [ 'size' => 10, 'sort' => 'desc' ])
+        array_merge($statsAgg['sender'], [ 'size' => 10, 'sort' => 'desc', 'xaxis' => true ])
       )
+      ->addAggregation($statsAgg['action'])
       ->toArray()
   ],
   'senderdomain_out' => [
@@ -244,8 +246,9 @@ $statsSettings['aggregations']['bar'] = [
     'buckets' => (new StatsBucket())
       ->addAggregation($statsAgg['listener']['out'])
       ->addAggregation(
-        array_merge($statsAgg['senderdomain'], [ 'size' => 10, 'sort' => 'desc' ])
+        array_merge($statsAgg['senderdomain'], [ 'size' => 10, 'sort' => 'desc', 'xaxis' => true ])
       )
+      ->addAggregation($statsAgg['action'])
       ->toArray()
   ],
   'senders_out' => [
@@ -254,8 +257,9 @@ $statsSettings['aggregations']['bar'] = [
     'buckets' => (new StatsBucket())
       ->addAggregation($statsAgg['listener']['out'])
       ->addAggregation(
-        array_merge($statsAgg['sender'], [ 'size' => 10, 'sort' => 'desc' ])
+        array_merge($statsAgg['sender'], [ 'size' => 10, 'sort' => 'desc', 'xaxis' => true ])
       )
+      ->addAggregation($statsAgg['action'])
       ->toArray()
   ],
   'recipientdomain' => [
@@ -264,8 +268,9 @@ $statsSettings['aggregations']['bar'] = [
     'buckets' => (new StatsBucket())
       ->addAggregation($statsAgg['listener']['in'])
       ->addAggregation(
-        array_merge($statsAgg['recipientdomain'], [ 'size' => 10, 'sort' => 'desc' ])
+        array_merge($statsAgg['recipientdomain'], [ 'size' => 10, 'sort' => 'desc', 'xaxis' => true ])
       )
+      ->addAggregation($statsAgg['action'])
       ->toArray()
   ],
   'recipients' => [
@@ -274,8 +279,9 @@ $statsSettings['aggregations']['bar'] = [
     'buckets' => (new StatsBucket())
       ->addAggregation($statsAgg['listener']['in'])
       ->addAggregation(
-        array_merge($statsAgg['recipient'], [ 'size' => 10, 'sort' => 'desc' ])
+        array_merge($statsAgg['recipient'], [ 'size' => 10, 'sort' => 'desc', 'xaxis' => true ])
       )
+      ->addAggregation($statsAgg['action'])
       ->toArray()
   ],
   'subject' => [

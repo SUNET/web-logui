@@ -27,11 +27,10 @@ function getDatasets($agg, $data, $metrics) {
       $dataset['data'] = [];
 
       if (isset($agg['aggregation']) && isset($bucket[$agg['aggregation']['key']])) {
-        $data = getMetrics($agg['aggregation'], $bucket[$agg['aggregation']['key']], $metrics);
+        $dataset['data'] = getMetrics($agg['aggregation'], $bucket[$agg['aggregation']['key']], $metrics);
       } else {
-        $data = getMetrics($agg, $bucket, $metrics);
+        $dataset['data'] = getMetrics($agg, $bucket, $metrics);
       }
-      $dataset['data'] = $data;
 
       $datasets[] = $dataset;
     }
@@ -40,6 +39,29 @@ function getDatasets($agg, $data, $metrics) {
   }
 
   return $datasets;
+}
+
+function getBuckets($agg, $data, $metrics, $depth = 0) {
+  $buckets = [];
+  $n = 0;
+  foreach ($data[$agg['key']]['buckets'] as $k => $bucket) {
+    $key = $bucket['key'] ?? $k;
+    $buckets[$key] = [
+      'count' => $bucket['doc_count'] ?? null,
+      'xaxis' => $agg['xaxis'] ?? false
+    ];
+    if ($agg['aggregation']['key'] && $bucket[$agg['aggregation']['key']]) {
+      $buckets[$key]['data'] = getBuckets($agg['aggregation'], $bucket, $metrics, ++$depth);
+    } else {
+      $value = getMetricValue($bucket, $metrics);
+      if ($depth == 0)
+        $buckets[$key]['data'][$key] = ['count' => $value];
+      else
+        $buckets[$key] = ['count' => $value];
+    }
+    $n++;
+  }
+  return $buckets;
 }
 
 function getMetrics($agg, $bucket, $metrics) {
@@ -70,6 +92,26 @@ function getMetricValue($value, $metrics = null) {
     $v = $metrics['format']($v);
 
   return $v;
+}
+
+function getChartData($buckets, $datasets = [], $label = null) {
+  foreach ($buckets as $k => $bucket) {
+    if (is_array($bucket['data'])) {
+      if ($bucket['xaxis'])
+        $datasets = getChartData($bucket['data'], $datasets, $k);
+      else
+        $datasets = getChartData($bucket['data'], $datasets);
+    } else {
+      if ($label !== null) {
+        $datasets[$label]['label'] = $label;
+        $datasets[$label]['data'][$k] = $bucket['count'];
+      } else {
+        $datasets[$k]['label'] = $k;
+        $datasets[$k]['data'][] = $bucket['count'];
+      }
+    }
+  }
+  return $datasets;
 }
 
 if ($_POST['page'] == 'stats')
@@ -123,45 +165,31 @@ if ($_POST['page'] == 'stats')
         $map['metrics']
       );
 
-      $datasets = getDatasets($aggs, $data['aggregations'], $map['metrics'] ?? null);
+      $buckets = getBuckets($aggs, $data['aggregations'], $map['metrics'] ?? null);
+      $chartData = getChartData($buckets);
+      $labels = array_keys($chartData);
+      $legends = [];
+      foreach ($chartData as $data)
+        if ($data['data'])
+          $legends = array_unique($legends + array_keys($data['data']));
 
-      $chartdata = [];
-      $chartdata['label'] = $name;
-
-      $labels = [];
-      foreach ($datasets as $k => $dataset) {
-        $data = [];
-        if (is_array($dataset['data']))
-          foreach ($dataset['data'] as $label => $v)
-            $data[isset($label) ? $label : $dataset['label']] = $v ?? 0;
-        else
-          $data[$dataset['label']] = $dataset['data'];
-
-        foreach ($data as $label => $v) {
-          $name = $label;
-          $chartdata['backgroundColor'][] = $settings->getStatsLabelColor()[$name]['bg'] ?? $colorset[$color++ % count($colorset)];
-          if (isset($settings->getStatsLabelColor()[$name]) && isset($settings->getStatsLabelColor()[$name]['border']))
-            $chartdata['borderColor'][] = $settings->getStatsLabelColor()[$name]['border'];
-          $labels[] = $name;
-          $chartdata['data'][] = $v;
+      $datasets = [];
+      foreach ($legends as $legend) {
+        $datasets[$legend]['label'] = $legend;
+        $bgColor = $colorset[$color++ % count($colorset)];
+        foreach ($labels as $label) {
+          $datasets[$legend]['data'][] = $chartData[$label]['data'][$legend];
+          $datasets[$legend]['backgroundColor'][] = $settings->getStatsLabelColor()[$legend]['bg'] ?? $settings->getStatsLabelColor()[$label]['bg'] ?? $bgColor;
         }
       }
 
-      if (count($chartdata) > 0)
-        die(json_encode([
-          'label' => $map['label'] ?? '',
-          'group' => $map['groupby'] ?? '',
-          'variant' => $map['variant'] ?? '',
-          'labels' => $labels,
-          'datasets' => [$chartdata]
-        ]));
-      else
-        die(json_encode([
-          'label' => $map['label'] ?? '',
-          'group' => $map['groupby'] ?? '',
-          'labels' => [],
-          'datasets' => []
-        ]));
+      die(json_encode([
+        'label' => $map['label'] ?? '',
+        'group' => $map['groupby'] ?? '',
+        'variant' => $map['variant'] ?? '',
+        'labels' => $labels,
+        'datasets' => array_values($datasets)
+      ]));
     } catch (Exception $e) {
       die(json_encode(['error' => ""]));
     }
