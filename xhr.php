@@ -174,12 +174,18 @@ if ($_POST['page'] == 'stats')
           $legends = array_unique($legends + array_keys($data['data']));
 
       $datasets = [];
-      foreach ($legends as $legend) {
+      foreach ($legends as $k => $legend) {
         $datasets[$legend]['label'] = $legend;
-        $bgColor = $colorset[$color++ % count($colorset)];
         foreach ($labels as $label) {
           $datasets[$legend]['data'][] = $chartData[$label]['data'][$legend];
-          $datasets[$legend]['backgroundColor'][] = $settings->getStatsLabelColor()[$legend]['bg'] ?? $settings->getStatsLabelColor()[$label]['bg'] ?? $bgColor;
+          $bgColor = $settings->getStatsLabelColor()[$legend]['bg'] ?? $settings->getStatsLabelColor()[$label]['bg'];
+          if (!$bgColor) {
+            if (count($legends) > 1)
+              $bgColor =  $colorset[$k % count($colorset)];
+            else
+              $bgColor = $colorset[$color++ % count($colorset)];
+          }
+          $datasets[$legend]['backgroundColor'][] = $bgColor;
         }
       }
 
