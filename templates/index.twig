@@ -161,37 +161,37 @@
                 <th style="width: 40px"></th>
               {% elseif column == 'from' %}
                 <th>
-                  <a href="{{link_sort}}&sort=from" class="text-dark">{% trans %}index.table.thead.from{% endtrans %}</a>
+                  <a href="{{link_sort}}&sort=from&search={{ search }}" class="text-dark">{% trans %}index.table.thead.from{% endtrans %}</a>
                   {% if sortby == 'from' %}
                     {% if sortorder == 'DESC' %}
-                      <a href="{{link_sort}}&sort=from&order=ASC" class="text-dark"><i class="fas fa-sort-up"></i></a>
+                      <a href="{{link_sort}}&sort=from&order=ASC&search={{ search }}" class="text-dark"><i class="fas fa-sort-up"></i></a>
                     {% else %}
-                      <a href="{{link_sort}}&sort=from&order=DESC" class="text-dark"><i class="fas fa-sort-down"></i></a>
+                      <a href="{{link_sort}}&sort=from&order=DESC&search={{ search }}" class="text-dark"><i class="fas fa-sort-down"></i></a>
                     {% endif %}
                   {% endif %}
                 </th>
               {% elseif column == 'to' %}
                 {% if mailhasmultipleaddresses %}
                   <th>
-                    <a href="{{link_sort}}&sort=to" class="text-dark">{% trans %}index.table.thead.to{% endtrans %}</a>
+                    <a href="{{link_sort}}&sort=to&search={{ search }}" class="text-dark">{% trans %}index.table.thead.to{% endtrans %}</a>
                     {% if sortby == 'to' %}
                       {% if sortorder == 'DESC' %}
-                        <a href="{{link_sort}}&sort=to&order=ASC" class="text-dark"><i class="fas fa-sort-up"></i></a>
+                        <a href="{{link_sort}}&sort=to&order=ASC&search={{ search }}" class="text-dark"><i class="fas fa-sort-up"></i></a>
                       {% else %}
-                        <a href="{{link_sort}}&sort=to&order=DESC" class="text-dark"><i class="fas fa-sort-down"></i></a>
+                        <a href="{{link_sort}}&sort=to&order=DESC&search={{ search }}" class="text-dark"><i class="fas fa-sort-down"></i></a>
                       {% endif %}
                     {% endif %}
                   </th>
                 {% endif %}
               {% elseif column == 'subject' %}
                 <th>
-                  <a href="{{link_sort}}&sort=subject" class="text-dark">
+                  <a href="{{link_sort}}&sort=subject&search={{ search }}" class="text-dark">
                     {% trans %}index.table.thead.subject{% endtrans %}
                     {% if sortby == 'subject' %}
                       {% if sortorder == 'DESC' %}
-                        <a href="{{link_sort}}&sort=subject&order=ASC" class="text-dark"><i class="fas fa-sort-up"></i></a>
+                        <a href="{{link_sort}}&sort=subject&order=ASC&search={{ search }}" class="text-dark"><i class="fas fa-sort-up"></i></a>
                       {% else %}
-                        <a href="{{link_sort}}&sort=subject&order=DESC" class="text-dark"><i class="fas fa-sort-down"></i></a>
+                        <a href="{{link_sort}}&sort=subject&order=DESC&search={{ search }}" class="text-dark"><i class="fas fa-sort-down"></i></a>
                       {% endif %}
                     {% endif %}
                   </a>
@@ -204,13 +204,13 @@
                 {% endif %}
               {% elseif column == 'date' %}
                 <th>
-                  <a href="{{link_sort}}&sort=date" class="text-dark">
+                  <a href="{{link_sort}}&sort=date&search={{ search }}" class="text-dark">
                     {% trans %}index.table.thead.date{% endtrans %}
                     {% if sortby == 'date' %}
                       {% if sortorder == 'DESC' %}
-                        <a href="{{link_sort}}&sort=date&order=ASC" class="text-dark"><i class="fas fa-sort-up"></i></a>
+                        <a href="{{link_sort}}&sort=date&order=ASC&search={{ search }}" class="text-dark"><i class="fas fa-sort-up"></i></a>
                       {% else %}
-                        <a href="{{link_sort}}&sort=date&order=DESC" class="text-dark"><i class="fas fa-sort-down"></i></a>
+                        <a href="{{link_sort}}&sort=date&order=DESC&search={{ search }}" class="text-dark"><i class="fas fa-sort-down"></i></a>
                       {% endif %}
                     {% endif %}
                   </a>
