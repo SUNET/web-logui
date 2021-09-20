@@ -21,6 +21,9 @@ body {
 
 .table-messages td {
 	padding: 0 !important;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	overflow: hidden;
 }
 
 .table-messages .table-row-checkbox {
@@ -37,6 +40,19 @@ body {
 	padding-top: .5rem;
 	padding-bottom: .5rem;
 	display: block;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	overflow: hidden;
+}
+
+.table-messages {
+	table-layout: fixed;
+}
+
+.table-messages .list-group p, .table-messages .list-group h4 {
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	overflow: hidden;
 }
 
 .table p:last-child {
