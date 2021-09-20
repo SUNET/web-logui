@@ -123,10 +123,12 @@ if ($_POST['page'] == 'stats')
     die(json_encode(['error' => 'Missing date range']));
 
   $name = $_POST['type'];
-  [$start, $stop] = valid_date_range($_POST['start'], $_POST['stop']);
+  [$start_ts, $stop_ts] = valid_date_range($_POST['start'], $_POST['stop']);
 
-  $dt_start = new DateTime($start);
-  $dt_stop = new DateTime($stop);
+  $dt_start = new DateTime();
+  $dt_start->setTimestamp($start_ts);
+  $dt_stop = new DateTime();
+  $dt_stop->setTimestamp($stop_ts);
   $days = $dt_stop->diff($dt_start)->format('%a');
   if ($days <= 3)
     $interval = 'hour';
@@ -157,8 +159,8 @@ if ($_POST['page'] == 'stats')
       $data = $esBackend->getAggregation(
         $aggs,
         [
-          'start' => $start,
-          'stop' => $stop,
+          'start_ts' => $start_ts,
+          'stop_ts' => $stop_ts,
           'target' => $_POST['target'] ?? null,
           'interval' => $fixedInterval
         ],
@@ -214,8 +216,8 @@ if ($_POST['page'] == 'stats')
       $data = $esBackend->getAggregation(
         $aggs,
         [
-          'start' => $start,
-          'stop' => $stop,
+          'start_ts' => $start_ts,
+          'stop_ts' => $stop_ts,
           'target' => $_POST['target'] ?? null,
           'interval' => $interval
         ],

@@ -15,7 +15,7 @@
   <script src="static/js/moment-with-locales.js"></script>
   <script>moment.locale('{{ set_locale }}');</script>
   <script src="vendor/components/jqueryui/jquery-ui.min.js"></script>
-  <script src="static/bootstrap-datepicker/js/bootstrap-datepicker.min.js"></script>
+  <script src="static/bootstrap-daterangepicker/js/bootstrap-daterangepicker.js"></script>
   <script src="static/chartjs/Chart.min.js"></script>
   <script src="static/js/charts.js"></script>
   <script src="static/js/stats.js"></script>
@@ -84,7 +84,7 @@
           </div>
         </li>
       </ul>
-      <form class="form-inline" action="?page=stats">
+      <form class="form-inline" action="?page=stats" id="datepicker">
         <input type="hidden" name="page" value="stats">
         {% include 'datepicker.twig' %}
       </form>
@@ -99,8 +99,8 @@
       containerName = "{{ access[0] }}";
     {% endif %}
     var chartRange = {
-      start: "{{ index_start }}",
-      stop: "{{ index_stop }}"
+      start: "{{ es_start_ts }}",
+      stop: "{{ es_stop_ts }}"
     };
     var defaultView = {{ default_view|json_encode|raw }};
     var inputFilterLabel = "{% trans %}statistics.nav.target{% endtrans %}";

@@ -90,13 +90,14 @@ class ElasticsearchBackend extends Backend
       }
 
       // offset
-      $start = new DateTime($param['index_range']['start']);
-      $stop = new DateTime($param['index_range']['stop']);
-      $stop->modify('+1 day');
+      $start = new DateTime();
+      $start->setTimestamp(($param['index_range']['start_ts']));
+      $stop = new DateTime();
+      $stop->setTimestamp(($param['index_range']['stop_ts']));
 
       $query->add(new RangeQuery($this->es->getTimefilter(), [
-        'lt' => $stop->getTimestamp() * 1000,
-        'gte' => $start->getTimestamp() * 1000
+        'gte' => $start->getTimestamp() * 1000,
+        'lt' => $stop->getTimestamp() * 1000
       ] + $query_timezone));
 
       if (is_string($search) && strlen($search) > 0) {
@@ -315,14 +316,16 @@ class ElasticsearchBackend extends Backend
       $query_timezone = [];
 
       // range
-      if ($param['start'] && $param['stop']) {
+      if ($param['start_ts'] && $param['stop_ts']) {
         if ($param['interval'] == 'fixed_interval') {
           $start = new DateTime('now');
           $stop = new DateTime('now');
           $start->modify('-2 hour');
         } else {
-          $start = new DateTime($param['start']);
-          $stop = new DateTime($param['stop']);
+          $start = new DateTime();
+          $start->setTimestamp($param['start_ts']);
+          $stop = new DateTime();
+          $stop->setTimestamp($param['stop_ts']);
           $stop->modify('+1 day');
 
           if (isset($_SESSION['timezone_utc'])) {

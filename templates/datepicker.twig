@@ -1,24 +1,8 @@
-<div class="input-daterange input-group" id="datepicker">
-  <div class="input-group-prepend btn-group">
-    <button type="button" class="btn btn-outline-secondary dropdown-toggle" data-toggle="dropdown"><i class="far fa-calendar-alt"></i></button>
-    <div id="shortcut_range" class="dropdown-menu" role="menu">
-      <a class="dropdown-item" href="#" data-range="1d">{% trans %}index.nav.interval.option.1{% endtrans %}</a>
-      <a class="dropdown-item" href="#" data-range="1w">{% trans %}index.nav.interval.option.2{% endtrans %}</a>
-      <a class="dropdown-item" href="#" data-range="1m">{% trans %}index.nav.interval.option.3{% endtrans %}</a>
-      <a class="dropdown-item" href="#" data-range="1y">{% trans %}index.nav.interval.option.4{% endtrans %}</a>
-      <div class="dropdown-divider"></div>
-      <a class="dropdown-item" href="#" data-range="24h">{% trans %}index.nav.interval.option.8{% endtrans %}</a>
-      <a class="dropdown-item" href="#" data-range="30d">{% trans %}index.nav.interval.option.5{% endtrans %}</a>
-      <a class="dropdown-item" href="#" data-range="60d">{% trans %}index.nav.interval.option.6{% endtrans %}</a>
-      <a class="dropdown-item" href="#" data-range="6m">{% trans %}index.nav.interval.option.7{% endtrans %}</a>
-    </div>
-  </div>
-  <input type="text" class="form-control" size="11" id="indexstart" name="start" value="{{ index_start }}">
-  <div class="input-group-append">
-    <span class="input-group-text px-2">{% trans %}index.nav.interval.between{% endtrans %}</span>
-  </div>
-  <input type="text" class="form-control" size="11" id="indexend" name="stop" value="{{ index_stop }}">
-  <div class="input-group-append">
-    <button type="submit" class="btn btn-outline-primary" id="update-interval"><i class="fa fa-redo-alt"></i></button>
+<div class="form-group">
+  <input type="hidden" id="datepicker_locale" value="{{ set_locale }}">
+  <input type="hidden" name="start" id="es_start_ts" value="{{ es_start_ts }}" />
+  <input type="hidden" name="stop" id="es_stop_ts" value="{{ es_stop_ts }}" />
+  <div id="es_daterangepicker" class="form-control">
+    <i class="fa fa-calendar-week fa-fw text-secondary"></i>&nbsp;<span></span> <i class="fa fa-caret-down"></i>
   </div>
 </div>

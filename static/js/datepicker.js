@@ -1,67 +1,40 @@
 $(document).ready(function() {
-	$('#datepicker').datepicker({
-		format: 'yyyy-mm-dd',
-		todayHighlight: true,
-		autoclose: true,
-		weekStart: 1
-	});
+	moment.locale($('#datepicker_locale').val());
 
-	$('#shortcut_range a').on('click', function(event) {
-    event.preventDefault();
-		var range = $(this).data('range');
-		var today = new Date();
-		var oneday = 60 * 60 * 24 * 1000;
-		var set_start = today.getTime();
-    var set_end = today.getTime();
+	var start = moment.unix(parseInt($('#es_start_ts').val()));
+	if (!start.isValid())
+		start = moment().subtract(2, 'days');
+	var stop = moment.unix(parseInt($('#es_stop_ts').val()));
+	if (!stop.isValid())
+		stop = moment();
 
-		switch (range) {
-			case '1d':
-				set_start = today.getTime();
-				set_end = today.getTime();
-				break;
-			case '1w':
-				set_start = today.getTime() - oneday * (today.getDay() - 1);
-				set_end = today.getTime();
-				break;
-			case '1m':
-				set_start = today.getTime() - oneday * (today.getDate() - 1);
-				set_end = today.getTime();
-				break;
-			case '1y':
-				var start = new Date(today.getFullYear(), 0, 1);
-				var diff = today - start;
-				set_start = today.getTime() - diff;
-				set_end = today.getTime();
-				break;
-			case '24h':
-					set_start = today.getTime() - oneday;
-					set_end = today.getTime();
-					break;
-			case '30d':
-				set_start = today.getTime() - oneday * 30;
-				set_end = today.getTime();
-				break;
-			case '60d':
-				set_start = today.getTime() - oneday * 60;
-				set_end = today.getTime();
-				break;
-			case '6m':
-				set_start = today.getTime() - oneday * 180;
-				set_end = today.getTime();
-				break;
-		}
+	function updateDateRangeLabel(start, stop) {
+		$('#es_daterangepicker span').text(start.format('MMM D, YYYY @ HH:mm') + ' - ' + stop.format('MMM D, YYYY @ HH:mm'));
+	}
 
-		$('#indexstart').datepicker('setDate', getFormatDate(set_start));
-		$('#indexend').datepicker('setDate', getFormatDate(set_end));
-	});
+	function submitDateRange(start, stop) {
+		$('#es_start_ts').val(start.unix());
+		$('#es_stop_ts').val(stop.unix());
+		$('#datepicker').submit();
+	}
+
+	$('#es_daterangepicker').daterangepicker({
+    timePicker: true,
+		timePicker24Hour: true,
+		timePickerSeconds: true,
+    startDate: start,
+    endDate: stop,
+		opens: 'left',
+		maxDate: moment().endOf('day'),
+		ranges: {
+			'Today': [moment().startOf('day'), moment().endOf('day')],
+			'Yesterday': [moment().subtract(1, 'days').startOf('day'), moment().subtract(1, 'days').endOf('day')],
+			'Last 7 Days': [moment().subtract(6, 'days').startOf('day'), moment().endOf('day')],
+			'Last 30 Days': [moment().subtract(29, 'days').startOf('day'), moment().endOf('day')],
+			'Last 60 Days': [moment().subtract(59, 'days').startOf('day'), moment().endOf('day')],
+			'This Month': [moment().startOf('month'), moment().endOf('month')],
+			'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+	 }
+  }, submitDateRange);
+	updateDateRangeLabel(start, stop);
 });
-
-function getFormatDate(ts) {
-	var currentDate = new Date(ts);
-	var year = currentDate.getFullYear();
-	var month = currentDate.getMonth() + 1;
-	month = (month < 10) ? '0' + month : month;
-	var day = currentDate.getDate();
-	day = (day < 10) ? '0' + day : day;
-	return year + '-' + month + '-' + day;
-}

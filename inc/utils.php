@@ -163,22 +163,14 @@ function logstash_document_parser($m) {
   ];
 }
 
-function valid_date_range($start = null, $stop = null, $strtime = '-24 hours') {
-  if ($start && $stop) {
-    $_SESSION['index_start'] = $start;
-    $_SESSION['index_stop'] = $stop;
+function valid_date_range($start_ts = null, $stop_ts = null, $strtime = '-6 days') {
+  if ($start_ts && $stop_ts) {
+    $_SESSION['es_start_ts'] = $start_ts;
+    $_SESSION['es_stop_ts'] = $stop_ts;
   }
 
-  $index_start = isset($_SESSION['index_start']) ? $_SESSION['index_start'] : date('Y-m-d', strtotime($strtime));
-  $index_stop = isset($_SESSION['index_stop']) ? $_SESSION['index_stop'] : date('Y-m-d');
+  $es_start_ts = isset($_SESSION['es_start_ts']) ? $_SESSION['es_start_ts'] : strtotime(date('Y-m-d', strtotime($strtime))) + $_SESSION['timezone'] * 60;
+  $es_stop_ts = isset($_SESSION['es_stop_ts']) ? $_SESSION['es_stop_ts'] : strtotime(date('Y-m-d')) + 86399 + $_SESSION['timezone'] * 60;
 
-  $check_date = explode('-', $index_start);
-  if (count($check_date) != 3 || !checkdate($check_date[1], $check_date[2], $check_date[0]))
-    $index_start = date('Y-m-d', strtotime($strtime));
-
-  $check_date = explode('-', $index_stop);
-  if (count($check_date) != 3 || !checkdate($check_date[1], $check_date[2], $check_date[0]))
-    $index_stop = date('Y-m-d');
-
-  return [$index_start, $index_stop];
+  return [$es_start_ts, $es_stop_ts];
 }

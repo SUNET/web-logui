@@ -71,7 +71,7 @@ $size = !isset($_GET['exportcsv']) && $size > 1000 ? 1000 : $size;
 $bulk_action_enabled = false;
 
 // time partitioning
-[$index_start, $index_stop] = valid_date_range($_GET['start'], $_GET['stop']);
+[$es_start_ts, $es_stop_ts] = valid_date_range($_GET['start'], $_GET['stop']);
 
 // Select box arrays
 $pagesize = [25, 50, 100, 500, 1000];
@@ -98,7 +98,7 @@ $param['sortorder'] = 'DESC';
 if (isset($_GET['order']) && in_array(strtoupper($_GET['order']), ['DESC', 'ASC']))
   $param['sortorder'] = strtoupper($_GET['order']);
 
-$param['index_range'] = ['start' => $index_start, 'stop' => $index_stop];
+$param['index_range'] = ['start_ts' => $es_start_ts, 'stop_ts' => $es_stop_ts];
 
 if (isset($_GET['unsetfilter'])) {
   $filters = $_SESSION['filters'] ?? [];
@@ -322,8 +322,8 @@ $twigLocals = [
   'mailhasmultipleaddresses'  => count($mailAccess) != 1 || count($domainAccess) > 0,
   'search_domains'            => (count($domainAccess) > 0 && count($domainAccess) < 30) ? Session::Get()->getAccess('domain') : [],
   'feature_scores'            => $settings->getDisplayScores(),
-  'index_start'               => $index_start,
-  'index_stop'                => $index_stop,
+  'es_start_ts'               => $es_start_ts,
+  'es_stop_ts'                => $es_stop_ts,
   'mails'                     => $mails,
   'mails_count'               => $total_count,
   'prev_button'               => $prev_button,
