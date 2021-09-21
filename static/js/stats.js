@@ -3,7 +3,6 @@ $(document).ready(function() {
 	var chartList = [];
 	var chartListData = [];
 	var intervalHandler = null;
-	$('#mode-interval').prop('checked', true);
 
 	var localStore = localStorage.getItem('charts-view-' + containerName);
 	if (typeof localStore === 'string') {
