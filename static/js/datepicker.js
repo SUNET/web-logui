@@ -9,7 +9,8 @@ $(document).ready(function() {
 		stop = moment();
 
 	function updateDateRangeLabel(start, stop) {
-		$('#es_daterangepicker span').text(start.format('MMM D, YYYY @ HH:mm') + ' - ' + stop.format('MMM D, YYYY @ HH:mm'));
+		$('<span></span>').addClass('d-none d-md-inline d-lg-none').text(start.format('MMM D, YYYY') + ' - ' + stop.format('MMM D, YYYY')).appendTo('#es_daterangelabel');
+		$('<span></span>').addClass('d-inline d-md-none d-lg-inline').text(start.format('MMM D, YYYY @ HH:mm') + ' - ' + stop.format('MMM D, YYYY @ HH:mm')).appendTo('#es_daterangelabel');
 	}
 
 	function submitDateRange(start, stop) {
