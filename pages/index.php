@@ -124,32 +124,6 @@ if (isset($_GET['ff']) && isset($_GET['fo']) && isset($_GET['fv'])) {
   }
 }
 
-function addFilter($field, $operator, $value) {
-  global $settings;
-  $filterSettings = $settings->getElasticsearchFilters();
-
-  if (!$filterSettings[$field] || !in_array($operator, $filterSettings[$field]['operators'] ?? []))
-    return;
-  if (is_array($filterSettings[$field]['values']) && !in_array($value, $filterSettings[$field]['values']))
-    return;
-
-  $duplicate = false;
-  foreach ($_SESSION['filters'][$field] ?? [] as $f) {
-    if ($f['operator'] == $operator && $f['value'] == $value)
-      $duplicate = true;
-  }
-
-  if (!$duplicate) {
-    $_SESSION['filters-id'] = !isset($_SESSION['filters-id']) ? 1 : ++$_SESSION['filters-id'];
-    $_SESSION['filters'][$field][] = [
-      'field' => $field,
-      'id' => $_SESSION['filters-id'],
-      'operator' => $operator,
-      'value' => $value
-    ];
-  }
-}
-
 if (isset($_SESSION['filters']))
   $param['filters'] = $_SESSION['filters'];
 
