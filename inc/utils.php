@@ -12,6 +12,9 @@ function history_parse_scores($mail)
   $rpd[40] = 'Valid bulk';
   $rpd[50] = 'Bulk';
   $rpd[100] = 'Spam';
+  $rpdav[0] = 'unknown';
+  $rpdav[50] = 'medium';
+  $rpdav[100] = 'high';
   $ret = array();
   if (isset($mail->scores['sa']['score']) && isset($mail->scores['sa']['sa_rules'])) {
     $ret['sa']['name'] = 'SpamAssassin';
@@ -25,6 +28,13 @@ function history_parse_scores($mail)
     $ret['rpd']['name'] = 'Cyren';
     $ret['rpd']['score'] = $rpd[intval($mail->scores['rpd']['score_rpd'])];
     $ret['rpd']['text'] = $mail->scores['rpd']['score_rpd_refid'];
+  }
+  if (isset($mail->scores['rpdav']) && isset($mail->scores['rpd']['score_rpd_refid'])) {
+    $ret['rpdav']['name'] = 'Cyren AV';
+    if (intval($mail->scores['rpdav']) > 0) {
+      $ret['rpdav']['score'] = 'Virus ('.$rpdav[intval($mail->scores['rpdav'])].')';
+      $ret['rpdav']['text'] = $mail->scores['rpd']['score_rpd_refid'];
+    } else $ret['rpdav']['score'] = 'Ok';
   }
   if (isset($mail->scores['kav'])) {
     $ret['kav']['name'] = 'Sophos';
