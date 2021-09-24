@@ -90,15 +90,10 @@ class ElasticsearchBackend extends Backend
       }
 
       // offset
-      $start = new DateTime();
-      $start->setTimestamp(($param['index_range']['start_ts']));
-      $stop = new DateTime();
-      $stop->setTimestamp(($param['index_range']['stop_ts']));
-
       $query->add(new RangeQuery($this->es->getTimefilter(), [
-        'gte' => $start->getTimestamp() * 1000,
-        'lt' => $stop->getTimestamp() * 1000
-      ] + $query_timezone));
+        'gte' => intval($param['index_range']['start_ts']) * 1000,
+        'lt' => intval($param['index_range']['stop_ts']) * 1000
+      ]));
 
       if (is_string($search) && strlen($search) > 0) {
         $searchFields = [
@@ -338,7 +333,7 @@ class ElasticsearchBackend extends Backend
         $query->add(new RangeQuery($this->es->getTimefilter(), [
           'lt' => $param['offset'] ?? $stop->getTimestamp() * 1000,
           'gte' => $start->getTimestamp() * 1000
-        ] + $query_timezone), BoolQuery::MUST);
+        ]), BoolQuery::MUST);
 
         $body->addQuery($query);
       }
