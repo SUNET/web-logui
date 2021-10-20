@@ -18,6 +18,10 @@ Installation
 4. Run the following commands to install the database and any dependencies from the project directory:
 - $ `composer install`
 - $ `php -f install.db.php`
+5. Enable the following cron script to update pending actions on emails
+```
+* * * * * /usr/bin/php /var/www/html/web-logui/cron.php.txt pending
+```
 
 Halon remote logging to Elasticsearch
 ---
