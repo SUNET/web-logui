@@ -113,8 +113,8 @@ if (isset($_GET['unsetfilter'])) {
 }
 
 // ff = field, fo = operator, fv = value
-if (isset($_GET['ff']) && isset($_GET['fo']) && isset($_GET['fv'])) {
-  addFilter($_GET['ff'], $_GET['fo'], $_GET['fv']);
+if (isset($_GET['ff']) && isset($_GET['fo'])) {
+  addFilter($_GET['ff'], $_GET['fo'], $_GET['fv'] ?? '');
 } else if (isset($_GET['mf']) && is_array($_GET['mf']['f'])) {
   $_SESSION['filters'] = [];
   $active_view_id = $_GET['mf']['id'];
