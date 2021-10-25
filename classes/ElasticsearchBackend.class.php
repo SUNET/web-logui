@@ -8,6 +8,7 @@ use ONGR\ElasticsearchDSL\Query\TermLevel\RangeQuery;
 use ONGR\ElasticsearchDSL\Query\FullText\MatchQuery;
 use ONGR\ElasticsearchDSL\Query\FullText\MatchPhraseQuery;
 use ONGR\ElasticsearchDSL\Query\FullText\MultiMatchQuery;
+use ONGR\ElasticsearchDSL\Query\TermLevel\ExistsQuery;
 use ONGR\ElasticsearchDSL\Sort\FieldSort;
 use ONGR\ElasticsearchDSL\Aggregation\Bucketing\RangeAggregation;
 use ONGR\ElasticsearchDSL\Aggregation\Bucketing\TermsAggregation;
@@ -116,6 +117,12 @@ class ElasticsearchBackend extends Backend
           $boolFilter = new BoolQuery();
           foreach ($i as $filter) {
             $boolOperator = BoolQuery::SHOULD;
+
+            if ($filter['operator'] === 'exists' && is_string($filterSettings[$filter['field']]['mapping'])) {
+              $boolFilter->add(new ExistsQuery($filterSettings[$filter['field']]['mapping']), $boolOperator);
+              continue;
+            }
+
             if ($filter['operator'] == 'contains')
               $operator = 'OR';
             else if ($filter['operator'] == 'not') {

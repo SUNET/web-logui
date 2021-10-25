@@ -23,6 +23,13 @@ $(document).ready(function() {
 
   $('#filter-value').attr('disabled', true);
 
+  $('#fo').on('change', function(e) {
+    if ($(this).val() == 'exists')
+      $('#fv').val('').attr('disabled', true);
+    else
+      $('#fv').attr('disabled', false);
+  });
+
   $('#ff').on('change', function(e) {
     $('#fo').empty();
     var filter = filters[e.currentTarget.value];

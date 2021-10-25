@@ -110,6 +110,8 @@
             {% set operator = '~' %}
           {% elseif filter.operator in ['=', '<=', '>=', '<', '>'] %}
             {% set operator = (' '~filter.operator) %}
+          {% elseif filter.operator == 'exists' %}
+            {% set operator = ' (exists)' %}
           {% else %}
             {% set operator = ':' %}
           {% endif %}
