@@ -111,8 +111,8 @@ if (isset($mail->serialno) && in_array($msgaction, ['QUEUE', 'QUARANTINE'])) {
       $headers = $message->getAllHeaders();
       if (is_array($headers) && count($headers)) {
         $header = implode("\n", array_map(function($header) {
-		return $header->getName() . ": " . $header->getRawValue();
-	}, $headers));
+    return $header->getName() . ": " . $header->getRawValue();
+  }, $headers));
       }
 
       if ($_GET['preview'] == 'text') {
@@ -160,15 +160,15 @@ $action_colors = array(
 );
 
 $action_icons = array(
-	'DELIVER' => 'fas fa-check',
-	'QUEUE' => 'fas fa-exchange-alt',
-	'QUARANTINE' => 'fas fa-inbox',
-	'ARCHIVE' => 'fas fa-inbox',
-	'REJECT' => 'fas fa-ban',
-	'DELETE' => 'far fa-trash-alt',
-	'BOUNCE' => 'fas fa-reply',
-	'ERROR' => 'fas fa-exclamation',
-	'DEFER' => 'far fa-clock',
+  'DELIVER' => 'fas fa-check',
+  'QUEUE' => 'fas fa-exchange-alt',
+  'QUARANTINE' => 'fas fa-inbox',
+  'ARCHIVE' => 'fas fa-inbox',
+  'REJECT' => 'fas fa-ban',
+  'DELETE' => 'far fa-trash-alt',
+  'BOUNCE' => 'fas fa-reply',
+  'ERROR' => 'fas fa-exclamation',
+  'DEFER' => 'far fa-clock',
 );
 
 // geoip
@@ -209,13 +209,13 @@ if (Session::Get()->checkAccessAll() || Session::Get()->checkReportAccess()) {
       $scores = history_parse_scores($mail) ?: null;
       $reportdata['messageid'] = $mail->msgid;
       $reportdata['actionid'] = $mail->msgactionid;
-			if ($reporttype == 'fp' && $reportfp)
-				$reportdata['refid'] = isset($scores['rpd']['text']) ? $scores['rpd']['text'] : '';
-			if (!empty($reportdata)) {
+      if ($reporttype == 'fp' && $reportfp)
+        $reportdata['refid'] = isset($scores['rpd']['text']) ? $scores['rpd']['text'] : '';
+      if (!empty($reportdata)) {
         $reportdata['type'] = $reporttype;
-				require_once BASE.'/pages/report.php';
-				die();
-			}
+        require_once BASE.'/pages/report.php';
+        die();
+      }
     }
   }
 }
