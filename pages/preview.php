@@ -110,9 +110,9 @@ if (isset($mail->serialno) && in_array($msgaction, ['QUEUE', 'QUARANTINE'])) {
 
       $headers = $message->getAllHeaders();
       if (is_array($headers) && count($headers)) {
-        $header = implode(array_map(function($header) {
-          return $header->getName() . ": " . $header->getRawValue();
-        }, $headers), "\n");
+        $header = implode("\n", array_map(function($header) {
+		return $header->getName() . ": " . $header->getRawValue();
+	}, $headers));
       }
 
       if ($_GET['preview'] == 'text') {
