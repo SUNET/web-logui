@@ -199,10 +199,10 @@
                 <th class="d-none d-lg-table-cell text-dark">{% trans %}index.table.thead.status{% endtrans %}</th>
               {% elseif column == 'scores' %}
                 {% if feature_scores %}
-                  <th class="d-none d-lg-table-cell text-dark" style="width: 120px;">{% trans %}index.table.thead.scores{% endtrans %}</th>
+                  <th class="d-none d-lg-table-cell text-dark" style="width: 160px;">{% trans %}index.table.thead.scores{% endtrans %}</th>
                 {% endif %}
               {% elseif column == 'date' %}
-                <th>
+                <th class="text-dark" style="width: 200px;">
                   <a href="{{link_sort}}&sort=date&search={{ search }}" class="text-dark">
                     {% trans %}index.table.thead.date{% endtrans %}
                     {% if sortby == 'date' %}
