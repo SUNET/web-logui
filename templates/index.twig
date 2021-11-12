@@ -198,6 +198,8 @@
                 </th>
               {% elseif column == 'status' %}
                 <th class="d-none d-lg-table-cell text-dark">{% trans %}index.table.thead.status{% endtrans %}</th>
+              {% elseif column == 'attachment' %}
+                <th class="d-none d-lg-table-cell text-dark" style="width: 25px"></th>
               {% elseif column == 'scores' %}
                 {% if feature_scores %}
                   <th class="d-none d-lg-table-cell text-dark" style="width: 120px;">{% trans %}index.table.thead.scores{% endtrans %}</th>
@@ -217,7 +219,6 @@
                 </th>
               {% endif %}
             {% endfor %}
-            <th style="width: 25px"></th>
           </tr>
         </thead>
         <tbody>
@@ -286,6 +287,12 @@
                     </span>
                   </a>
                 </td>
+              {% elseif column == 'attachment' %}
+                <td>
+                  {% if mail.doc.metadata.file_1_name is defined %}
+                    <i class="fas fa-paperclip text-muted"></i>
+                  {% endif %}
+                </td>
               {% elseif column == 'scores' %}
                 {% if feature_scores %}
                   <td class="d-none d-lg-table-cell">
@@ -306,11 +313,6 @@
                 </td>
               {% endif %}
             {% endfor %}
-            <td>
-              {% if mail.doc.metadata.file_1_name is defined %}
-                <i class="fas fa-paperclip text-muted"></i>
-              {% endif %}
-            </td>
           </tr>
           {% endfor %}
         </tbody>
