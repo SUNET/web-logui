@@ -177,7 +177,7 @@ foreach ($results as $m) {
     $scores = history_parse_scores($m['doc']);
     foreach ($scores as $engine => $s) {
       if ($engine == 'rpd' && $s['score'] != 'Unknown')
-        $printscores[] = strtolower($s['score']);
+        $printscores[] = "RPD=".strtolower($s['score']);
       if ($engine == 'kav' && $s['score'] != 'Ok')
         $printscores[] = 'virus';
       if ($engine == 'clam' && $s['score'] != 'Ok')
@@ -185,7 +185,9 @@ foreach ($results as $m) {
       if ($engine == 'rpdav' && $s['score'] != 'Ok')
         $printscores[] = 'virus';
       if ($engine == 'sa')
-        $printscores[] = $s['score'];
+        $printscores[] = "SA=".$s['score'];
+      if ($engine == 'rsd')
+        $printscores[] = "RSD=".$s['score'];
     }
     $mail['scores'] = implode(', ', array_unique($printscores));
   }

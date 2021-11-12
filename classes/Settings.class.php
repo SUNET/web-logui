@@ -73,6 +73,8 @@ class Settings
       'value' => [
         'sa' => 'sa',
         'sa_rules' => 'sa_rules',
+        'rsd' => 'rsd',
+        'rsd_symbols' => 'rsd_symbols',
         'kav' => 'kav',
         'clam' => 'clam'
       ]

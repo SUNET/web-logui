@@ -29,6 +29,15 @@ function history_parse_scores($mail)
     $ret['rpd']['score'] = $rpd[intval($mail->scores['rpd']['score_rpd'])];
     $ret['rpd']['text'] = $mail->scores['rpd']['score_rpd_refid'];
   }
+  if (isset($mail->scores['rsd']['score']) && isset($mail->scores['rsd']['rsd_symbols'])) {
+    $ret['rpd']['name'] = 'Rspamd';
+    $ret['rpd']['score'] = floatval($mail->scores['rpd']['score']);
+    $rsd_scores = [];
+    foreach ($mail->scores['rsd']['rsd_symbols'] as $key => $value)
+      $rsd_scores[] = $key.'='.$value;
+    $ret['rsd']['text'] = implode(', ', $rsd_scores);
+  }
+  }
   if (isset($mail->scores['rpdav']) && isset($mail->scores['rpd']['score_rpd_refid'])) {
     $ret['rpdav']['name'] = 'Cyren AV';
     if (intval($mail->scores['rpdav']) > 0) {
@@ -144,6 +153,10 @@ function es_document_parser($m, $schema, $metadata_filters = null) {
       'sa' => [
         'score' => $m['_source'][$schema['scores']['key']][$schema['scores']['value']['sa']],
         'sa_rules' => $m['_source'][$schema['scores']['key']][$schema['scores']['value']['sa_rules']]
+      ],
+      'rsd' => [
+        'score' => $m['_source'][$schema['scores']['key']][$schema['scores']['value']['rsd']],
+        'rsd_symbols' => $m['_source'][$schema['scores']['key']][$schema['scores']['value']['rsd_symbols']]
       ],
       'kav' => $m['_source'][$schema['scores']['key']][$schema['scores']['value']['kav']],
       'clam' => $m['_source'][$schema['scores']['key']][$schema['scores']['value']['clam']]
