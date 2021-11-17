@@ -32,11 +32,10 @@ function history_parse_scores($mail)
   if (isset($mail->scores['rsd']['score']) && isset($mail->scores['rsd']['rsd_symbols'])) {
     $ret['rpd']['name'] = 'Rspamd';
     $ret['rpd']['score'] = floatval($mail->scores['rpd']['score']);
-    $rsd_scores = [];
+    $rsd_symbols = [];
     foreach ($mail->scores['rsd']['rsd_symbols'] as $key => $value)
-      $rsd_scores[] = $key.'='.$value;
-    $ret['rsd']['text'] = implode(', ', $rsd_scores);
-  }
+      $rsd_symbols[] = $key.'='.$value;
+    $ret['rsd']['text'] = implode(', ', $rsd_symbols);
   }
   if (isset($mail->scores['rpdav']) && isset($mail->scores['rpd']['score_rpd_refid'])) {
     $ret['rpdav']['name'] = 'Cyren AV';
