@@ -1,0 +1,35 @@
+include "elastic/settings.hsl";
+
+$httpoptions = [
+	"timeout" => 10,
+	"tls_default_ca" => true,
+	"headers" => ["Content-Type: application/json"]
+];
+
+function sendlog() {
+	global $elasticurl, $httpoptions, $indexname, $indexrotate, $indextype; // settings
+	global $message, $arguments;
+
+	$receivedtime = GetMetaData()["receivedtime"];
+	$time = time();
+	$logdata["doc"] = [
+		"queue" => [
+			"action" => $arguments["action"] ?? "DELIVER",
+			"retry" => $arguments["retry"],
+			"errormsg" => $arguments["attempt"]["result"]["reason"][0] ?? "",
+			"errorcode" => $arguments["attempt"]["result"]["code"],
+			"transfertime" => $arguments["attempt"]["duration"]
+		],
+		"sender" => $message["sender"],
+		"senderdomain" => $message["senderaddress"]["domain"],
+		"recipient" => $message["recipient"],
+		"recipientdomain" => $message["recipientaddress"]["domain"],
+		"transportid" => $message["transportid"],
+		"finishedtime" => round($time * 1000)
+	];
+
+	$path = "/".$indexname."-".strftime($indexrotate, $receivedtime)."/".$indextype."/".$message["id"]["transaction"].":".$message["id"]["queue"]."/_update";
+	http($elasticurl.$path, $httpoptions, [], json_encode($logdata));
+}
+
+sendlog();

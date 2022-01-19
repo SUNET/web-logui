@@ -1,0 +1,18 @@
+include "elastic/eod.hsl";
+
+$transactionid = $transaction["id"];
+$sender = $transaction["senderaddress"];
+$recipients = $transaction["recipients"];
+$mail = $arguments["mail"];
+$metadata = [];
+
+// Queue message for all recipients
+$receivedtime = time();
+$metadata["receivedtime"] = "$receivedtime";
+foreach ($recipients as $recipient) {
+    $id = $mail->queue($sender, $recipient["address"], $recipient["transportid"], ["metadata" => $metadata]);
+    $actionid = $id["queue"];
+    sendlog("QUEUE", "", $recipient, $receivedtime, $actionid, $metadata);
+}
+
+Accept();

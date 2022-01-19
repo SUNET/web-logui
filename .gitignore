@@ -3,7 +3,6 @@
 ._*
 
 .vagrant
-.vscode
 
 /settings.php
 /settings-stats.php

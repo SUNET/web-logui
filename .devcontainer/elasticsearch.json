@@ -1,0 +1,45 @@
+{
+    "index_patterns": ["halon-*"],
+    "settings": {
+        "number_of_shards": 1,
+        "number_of_replicas": 0,
+        "analysis": {
+            "analyzer": {
+                "email_analyzer": {
+                    "type": "custom",
+                    "tokenizer": "uax_url_email",
+                    "filter": ["lowercase", "stop"]
+                }
+            }
+        }
+    },
+    "mappings": {
+        "properties": {
+            "receivedtime": {
+                "type": "date",
+                "format": "epoch_millis"
+            },
+            "finishedtime": {
+                "type": "date",
+                "format": "epoch_millis"
+            },
+            "senderip": {
+                "type": "ip"
+            },
+            "serverip": {
+                "type": "ip"
+            },
+            "owner": {
+                "type": "text",
+                "analyzer": "email_analyzer"
+            },
+            "ownerdomain": {
+                "type": "text",
+                "analyzer": "email_analyzer"
+            },
+            "messageid": {
+                "type": "keyword"
+            }
+        }
+    }
+}

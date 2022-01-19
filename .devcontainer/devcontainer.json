@@ -1,0 +1,16 @@
+
+{
+	"name": "web-logui",
+	"dockerComposeFile": [
+		"docker-compose.yaml"
+	],
+	"overrideCommand": false,
+	"workspaceFolder": "/var/www/html",
+	"service": "web-logui",
+	"extensions": [
+		"Halon.vscode-halon",
+		"Halon.hsl-linter",
+		"Halon.hsl-debug",
+		"felixfbecker.php-debug"
+	]
+}

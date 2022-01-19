@@ -1,0 +1,42 @@
+services:
+  web-logui:
+    build:
+      context: ./
+      dockerfile: ./Dockerfile
+      args:
+        HALON_REPO_USER: ${HALON_REPO_USER}
+        HALON_REPO_PASS: ${HALON_REPO_PASS}
+    volumes:
+      - ../:/var/www/html
+      - vendor:/var/www/html/vendor
+      - sqlite:/sqlite
+      - ./smtpd/dist:/etc/halon
+      - halon-spool:/var/spool/halon
+    ports:
+      - "80:80"
+      - "443:443"
+      - "9000:9000"
+      - "25:25"
+  kibana:
+    image: docker.elastic.co/kibana/kibana:7.16.2
+    environment:
+      ELASTICSEARCH_HOSTS: '["http://elasticsearch:9200"]'
+    ports:
+      - "5601:5601"
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.16.2
+    environment:
+      - discovery.type=single-node
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - elasticsearch-data:/usr/share/elasticsearch/data
+volumes:
+  halon-spool:
+  sqlite:
+  vendor:
+  elasticsearch-data:

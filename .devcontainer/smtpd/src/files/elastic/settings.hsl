@@ -1,0 +1,4 @@
+$elasticurl = "http://elasticsearch:9200";
+$indexname = "halon";
+$indexrotate = "%Y-%m-%d";
+$indextype = "_doc";
