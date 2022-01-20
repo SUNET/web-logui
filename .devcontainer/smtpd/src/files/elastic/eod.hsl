@@ -26,7 +26,7 @@ function sendlog($action, $reason, $recipient, $receivedtime, $actionid = 1, $me
 	$logdata += [
 		"action" => $action,
 		"reason" => $reason,
-		"serial" => gethostname(),
+		"serial" => "12345678",
 		"owner" => $logdata["direction"] == "outbound" ? $transaction["sender"] : $recipient["recipient"],
 		"ownerdomain" => $logdata["direction"] == "outbound" ? $transaction["senderaddress"]["domain"] : $recipient["address"]["domain"],
 		"hostname" => gethostname(),

@@ -9,7 +9,6 @@ services:
     volumes:
       - ../:/var/www/html
       - vendor:/var/www/html/vendor
-      - sqlite:/sqlite
       - ./smtpd/dist:/etc/halon
       - halon-spool:/var/spool/halon
     ports:
@@ -37,6 +36,5 @@ services:
       - elasticsearch-data:/usr/share/elasticsearch/data
 volumes:
   halon-spool:
-  sqlite:
   vendor:
   elasticsearch-data:

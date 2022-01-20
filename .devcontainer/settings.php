@@ -9,10 +9,11 @@
  * Add credentials to your Halon nodes to enable preview and actions on queued or quarantined emails
  */
 
-// $settings['node'][] = array(
-// 		'address' => 'https://10.2.0.30/',
-// 		'tls' => array('verify_peer' => true, 'verify_peer_name' => true, 'allow_self_signed' => false),
-// 		);
+$settings['node'][] = array(
+		'address' => 'http://localhost:8080',
+		'secret' => 'badsecret',
+		'serialno' => '12345678'
+		);
 // $settings['node'][] = array(
 // 		'address' => 'https://10.2.0.31/',
 // 		'username' => 'admin',
@@ -36,7 +37,7 @@
  * Use an absolute path to the database, with read and write permissions for the
  * user running the web server
  */
-$settings['database']['dsn'] = 'sqlite:/sqlite/web-logui.db';
+$settings['database']['dsn'] = 'sqlite:/tmp/web-logui.db';
 
 /*
  * Generic settings
