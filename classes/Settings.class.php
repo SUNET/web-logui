@@ -209,10 +209,11 @@ class Settings
     foreach ($this->nodeCredentials as $id => $cred) {
       $username = isset($cred['username']) ? $cred['username'] : null;
       $password = isset($cred['password']) ? $cred['password'] : null;
+      $secret = isset($cred['secret']) ? $cred['secret'] : null;
       $serial = isset($cred['serialno']) ? $cred['serialno'] : null;
       $tls = isset($cred['tls']) ? $cred['tls'] : array();
       $timeout = isset($cred['timeout']) ? (int)$cred['timeout'] : $this->nodeDefaultTimeout;
-      $this->nodes[] = new Node($id, $cred['address'], $username, $password, $serial, $tls, $timeout);
+      $this->nodes[] = new Node($id, $cred['address'], $username, $password, $serial, $tls, $timeout, $secret);
     }
 
     $mappings = [];

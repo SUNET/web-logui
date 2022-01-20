@@ -9,10 +9,19 @@
  * Add credentials to your Halon nodes to enable preview and actions on queued or quarantined emails
  */
 
+// // Linux package example
+// $settings['node'][] = array(
+// 		'address' => 'https://10.2.0.31/',
+// 		'secret' => 'badsecret',
+// 		'serialno' => '12345678',
+// 		'tls' => array('verify_peer' => true, 'verify_peer_name' => true, 'allow_self_signed' => false),
+// 		);
+// // FreeBSD VM example
 // $settings['node'][] = array(
 // 		'address' => 'https://10.2.0.30/',
 // 		'tls' => array('verify_peer' => true, 'verify_peer_name' => true, 'allow_self_signed' => false),
 // 		);
+// // FreeBSD VM example
 // $settings['node'][] = array(
 // 		'address' => 'https://10.2.0.31/',
 // 		'username' => 'admin',

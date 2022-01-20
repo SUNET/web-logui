@@ -6,16 +6,18 @@ class Node
   private $address;
   private $username;
   private $password;
+  private $secret;
   private $serial;
   private $tls;
   private $timeout;
 
-  public function __construct($id, $address, $username = null, $password = null, $serial = null, $tls = array(), $timeout = null)
+  public function __construct($id, $address, $username = null, $password = null, $serial = null, $tls = array(), $timeout = null, $secret = null)
   {
     $this->id = $id;
     $this->address = $address;
     $this->username = $username;
     $this->password = $password;
+    $this->secret = $secret;
     $this->serial = $serial;
     $this->tls = $tls;
     $this->timeout = is_numeric($timeout) ? (int)$timeout : 5;
@@ -27,11 +29,13 @@ class Node
 
     if($username === null) $username = $this->getUsername();
     if($password === null) $password = $this->getPassword();
+    $secret = $this->getSecret();
 
     $options = array(
       'host' => $this->getAddress(),
       'username' => $username,
       'password' => $password,
+      'secret' => $secret,
       'timeout' => $this->timeout,
       'tls' => $this->tls
       );
@@ -59,6 +63,11 @@ class Node
   public function getPassword()
   {
     return $this->password;
+  }
+
+  public function getSecret()
+  {
+    return $this->secret;
   }
 
   public function getSerial($autoload = false)

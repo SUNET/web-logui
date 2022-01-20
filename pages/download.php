@@ -50,7 +50,24 @@ try {
 
   require_once 'inc/eml.php';
   header('Content-Disposition: attachment; filename='.$filename.'.eml');
-  eml_download($client, $response->body->items[0]->hqfpath, $actionid, $_GET['original'] == '1', false);
+  if ($node->getSecret()) {
+    $response = $client->operation('/protobuf', 'POST', null, [
+      'command' => 'Q',
+      'program' => 'smtpd',
+      'payload' => [
+        'id' => [
+          'transaction' => $mail->msgid,
+          'queue' => $mail->msgactionid
+        ]
+      ]
+    ]);
+    if ($response->body && $response->body->rfc822) {
+      echo base64_decode($response->body->rfc822);
+      
+    }
+  } else {
+    eml_download($client, $response->body->items[0]->hqfpath, $actionid, $_GET['original'] == '1', false);
+  }
 } catch (RestException $e) {
   echo "Error: ".$e->getMessage();
 }

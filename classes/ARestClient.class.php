@@ -49,6 +49,7 @@ class ARestClient
 	private $timeout = null;
 	private $username = null;
 	private $password = null;
+	private $secret = null;
 
 	public function __construct($opts = [])
 	{
@@ -56,6 +57,7 @@ class ARestClient
 		if (isset($opts['host'])) $this->host = $opts['host'];
 		if (isset($opts['tls'])) $this->tls = $opts['tls'];
 		if (isset($opts['proxy'])) $this->proxy = $opts['proxy'];
+		if (isset($opts['secret'])) $this->secret = $opts['secret'];
 		$this->timeout = $opts['timeout'] ?? 5;
 		$this->username = $opts['username'] ?? $_SESSION['username'];
 		$this->password = $opts['password'] ?? $_SESSION['password'];
@@ -100,6 +102,7 @@ class ARestClient
 		$request .= "Host: {$url['host']}:{$url['port']}\r\n";
 		$request .= "Content-Type: application/json; charset=utf-8\r\n";
 		$request .= "Authorization: Basic ".base64_encode($this->username.':'.$this->password)."\r\n";
+		if ($this->secret) $request .= "X-API-Key: {$this->secret}\r\n";
 		$request .= "X-Forwarded-For: [{$_SERVER['REMOTE_ADDR']}] webui\r\n";
 		if ($body) $request .= "Content-Length: ".strlen($encoded_body)."\r\n";
 		$request .= "\r\n";

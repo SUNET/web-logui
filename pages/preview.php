@@ -10,6 +10,7 @@ $errors = [];
 $showoriginal = isset($_GET['original']);
 $found_in_node = false;
 $pending_action_type = null;
+$disabled_features = Session::Get()->getDisabledFeatures();
 
 $esBackend = new ElasticsearchBackend($settings->getElasticsearch());
 $mail = $esBackend->getMail($_GET['index'], $_GET['id']);
@@ -90,7 +91,25 @@ if (isset($mail->serialno) && in_array($msgaction, ['QUEUE', 'QUARANTINE'])) {
       $purifier = new HTMLPurifier($purifier_cfg);
 
       require_once 'inc/eml.php';
-      $maildata = eml_download($client, $response->body->items[0]->hqfpath, $mail->msgactionid, $showoriginal, true);
+      $maildata = null;
+      if ($node->getSecret()) {
+        $disabled_features[] = 'preview-mail-body-original';
+        $response = $client->operation('/protobuf', 'POST', null, [
+          'command' => 'Q',
+          'program' => 'smtpd',
+          'payload' => [
+            'id' => [
+              'transaction' => $mail->msgid,
+              'queue' => $mail->msgactionid
+            ]
+          ]
+        ]);
+        if ($response->body && $response->body->rfc822) {
+          $maildata = base64_decode($response->body->rfc822);
+        }
+      } else {
+        $maildata = eml_download($client, $response->body->items[0]->hqfpath, $mail->msgactionid, $showoriginal, true);
+      }
 
       $message = \ZBateson\MailMimeParser\Message::from($maildata);
       $def = $purifier_cfg->getHTMLDefinition();
@@ -264,7 +283,7 @@ $twigLocals = [
   'action_text'         => substr($mail->queue['action'] ?? $mail->msgaction, 0, 1),
   'action_colors'				=> $action_colors,
   'action_icons'				=> $action_icons,
-  'disabled_features'		=> Session::Get()->getDisabledFeatures(),
+  'disabled_features'		=> $disabled_features,
   'feature_scores'      => $settings->getDisplayScores(),
   'feature_textlog'     => $settings->getDisplayTextlog(),
   'is_superadmin'       => Session::Get()->checkAccessAll(),
