@@ -63,7 +63,6 @@ try {
     ]);
     if ($response->body && $response->body->rfc822) {
       echo base64_decode($response->body->rfc822);
-      
     }
   } else {
     eml_download($client, $response->body->items[0]->hqfpath, $actionid, $_GET['original'] == '1', false);
