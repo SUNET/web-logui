@@ -22,6 +22,10 @@ Installation
 ```
 * * * * * /usr/bin/php /var/www/html/web-logui/cron.php.txt pending
 ```
+6. Enable the following cron script to send out digest emails
+```
+0 0 * * * /usr/bin/php /var/www/html/web-logui/cron.php.txt digestday
+```
 
 Halon remote logging to Elasticsearch
 ---

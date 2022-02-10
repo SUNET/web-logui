@@ -10,7 +10,7 @@ if (Session::Get()->isAuthenticated() && $_SERVER['QUERY_STRING'] == 'xhr') {
   die();
 }
 
-if (!Session::Get()->isAuthenticated() && (!isset($_GET['page']) || $_GET['page'] != 'login')) {
+if (!Session::Get()->isAuthenticated() && (!isset($_GET['page']) || $_GET['page'] != 'login' && $_GET['page'] != 'digest')) {
   session_destroy();
   header("Location: ?page=login&query=".urlencode($_SERVER['QUERY_STRING']));
   die();
@@ -35,6 +35,9 @@ switch (@$_GET['page'])
   break;
   case 'download':
     require_once BASE.'/pages/download.php';
+  break;
+  case 'digest':
+    require_once BASE.'/pages/digest.php';
   break;
   default:
   case 'index':

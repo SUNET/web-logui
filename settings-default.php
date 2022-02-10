@@ -58,6 +58,7 @@
 //$settings['display-listener']['mailserver:inbound'] = 'Inbound';
 //$settings['display-transport']['mailtransport:outbound'] = 'Internet';
 //$settings['display-index-columns'] = ['action', 'from', 'to', 'subject', 'status', 'scores', 'date'];
+//$settings['mail']['from'] = 'Mail quarantine <postmaster@example.org>';
 
 /*
  * Elasticsearch settings
@@ -210,6 +211,18 @@
 //				'mail' => array('foo@example.com'),
 //				),
 // 		);
+//$settings['authentication'][] = array(
+//    'type' => 'control',
+//    'url' => 'https://127.0.0.1',
+//    'apikey' => 'secret',
+//    'tls' => array('verify_peer' => true, 'verify_peer_name' => true, 'allow_self_signed' => false),
+//    'filters' => [
+//      'settings' => [
+//        'field' => 'digestreport',
+//        'value' => true
+//      ]
+//    ]
+//    );
 
 /*
  * Session transfer
@@ -250,3 +263,21 @@
   * Session transfer
   */
 //$settings['session-navbar-hide'] = false;
+
+/*
+ * It's possible to send "digest" messages with a list of what's in
+ * the quarantine. It is added as a cron job, to be run every 24 hours:
+ * # php cron.php.txt digestday
+ * and it will use the authentication sources to find users. To use static
+ * users (type account), add a 'email' to them. To send digest messages to
+ * EVERY RECIPIENT (user or not) that has quarantine messages, enable the
+ * to-all option below. To have a "direct release link" and a "preview link"
+ * in the messages, set a digest secret below and then enable the
+ * relevant digest link setting.
+ */
+
+//$settings['digest']['to-all'] = true;
+//$settings['digest']['secret'] = 'badsecret';
+//$settings['digest']['release-link'] = false;
+//$settings['digest']['preview-link'] = false;
+//$settings['digest']['quarantine-filter'] = ['1'];
