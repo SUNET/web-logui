@@ -3,7 +3,7 @@
 use ONGR\ElasticsearchDSL;
 use ONGR\ElasticsearchDSL\Search;
 use ONGR\ElasticsearchDSL\Query\Compound\BoolQuery;
-use ONGR\ElasticsearchDSL\Query\TermLevel\TermQuery;
+use ONGR\ElasticsearchDSL\Query\TermLevel\TermsQuery;
 use ONGR\ElasticsearchDSL\Query\TermLevel\RangeQuery;
 use ONGR\ElasticsearchDSL\Query\FullText\MatchQuery;
 use ONGR\ElasticsearchDSL\Query\FullText\MatchPhraseQuery;
@@ -184,7 +184,7 @@ class ElasticsearchBackend extends Backend
       // restrict
       $restrict = new BoolQuery();
       foreach ($this->restrict_query() as $v)
-        $restrict->add(new TermQuery($v['type'], $v['value']), BoolQuery::SHOULD);
+        $restrict->add(new TermsQuery($v['type'], $v['values']), BoolQuery::SHOULD);
 
       // filter
       $body = new Search();
@@ -353,7 +353,7 @@ class ElasticsearchBackend extends Backend
       // restrict
       $restrict = new BoolQuery();
       foreach ($this->restrict_query() as $v)
-        $restrict->add(new TermQuery($v['type'], $v['value']), BoolQuery::SHOULD);
+        $restrict->add(new TermsQuery($v['type'], $v['values']), BoolQuery::SHOULD);
 
       $body->addQuery($restrict);
       $body->addAggregation($aggregation);
@@ -447,16 +447,13 @@ class ElasticsearchBackend extends Backend
     $access = Session::Get()->getAccess();
     $restrict = [];
     if (is_array($access['domain']))
-      foreach ($access['domain'] as $domain)
-        $restrict[] = ['type' => 'ownerdomain', 'value' => $domain];
+      $restrict[] = ['type' => 'ownerdomain', 'values' => $access['domain']];
 
     if (is_array($access['mail']))
-      foreach ($access['mail'] as $mail)
-        $restrict[] = ['type' => 'owner', 'value' => $mail];
+      $restrict[] = ['type' => 'owner', 'values' => $access['mail']];
 
     if (is_array($access['sasl']))
-      foreach ($access['sasl'] as $sasl)
-        $restrict[] = ['type' => 'saslusername', 'value' => $sasl];
+      $restrict[] = ['type' => 'saslusername', 'values' => $access['sasl']];
 
     return $restrict;
   }
