@@ -15,6 +15,7 @@ if (isset($_POST['username']) && isset($_POST['password'])) {
 
   foreach ($settings->getAuthSources() as $method)
   {
+    if ($method['type'] == 'control') continue; // Not implemented
     $authmethod = 'halon_login_' . $method['type'];
     if (!function_exists($authmethod) && file_exists('modules/Login.'.$method['type'].'.php'))
       require_once 'modules/Login.'.$method['type'].'.php';
