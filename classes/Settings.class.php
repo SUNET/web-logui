@@ -151,6 +151,7 @@ class Settings
   private $digestSecret = null;
   private $digestReleaseLink = false;
   private $digestPreviewLink = false;
+  private $digestPreviewURL = null;
   private $digestQuarantineFilter = [];
   private $mailSender = null;
 
@@ -238,6 +239,7 @@ class Settings
     $this->extract($this->digestSecret, 'digest.secret');
     $this->extract($this->digestReleaseLink, 'digest.release-link');
     $this->extract($this->digestPreviewLink, 'digest.preview-link');
+    $this->extract($this->digestPreviewURL, 'digest.preview-url');
     $this->extract($this->digestQuarantineFilter, 'digest.quarantine-filter');
     $this->extract($this->mailSender, 'mail.from');
   }
@@ -561,6 +563,14 @@ class Settings
   public function getDigestPreviewLink()
   {
     return $this->digestPreviewLink;
+  }
+
+  /**
+   * Overrides getPublicURL()
+   */
+  public function getDigestPreviewURL()
+  {
+    return $this->digestPreviewURL;
   }
 
   /**

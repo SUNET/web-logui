@@ -281,3 +281,6 @@
 //$settings['digest']['release-link'] = false;
 //$settings['digest']['preview-link'] = false;
 //$settings['digest']['quarantine-filter'] = ['1'];
+
+// Optional, only change if preview URL should be different from public URL
+//$settings['digest']['preview-url'] = 'http://10.2.0.166/messages';

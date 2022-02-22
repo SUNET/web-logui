@@ -46,7 +46,13 @@ $msgto = strtolower($mail->recipient->localpart.'@'.$mail->recipient->domain);
 
 // preview email
 if ($_GET['preview'] == 'true') {
-	if (!Session::Get()->isAuthenticated()) {
+	if ($settings->getDigestPreviewURL()) {
+		$url = $settings->getDigestPreviewURL().'?'.http_build_query([
+			'search' => $msgid
+		]);
+		header('Location: '.$url);
+	}
+	else if (!Session::Get()->isAuthenticated()) {
 		session_destroy();
 		header('Location: ?page=login&query='.urlencode($_SERVER['QUERY_STRING']));
 	} else {

@@ -84,9 +84,12 @@ if (isset($_POST['session']))
     addFilter($_POST['ff'], $_POST['fo'], $_POST['fv']);
 
   $page = 'index';
+  $query = '';
   if (isset($_POST['page']))
     $page = $_POST['page'];
-  header("Location: index.php?page=$page");
+  if (isset($_POST['search']))
+    $query .= '&search='.$_POST['search'];
+  header('Location: index.php?page='.$page.$query);
   die();
 }
 
