@@ -182,6 +182,11 @@
 //     'label' => 'SpamAssassin score',
 //     'operators' => ['=', '<=', '>=', '<', '>'],
 //     'mapping' => 'scores.sa'
+//   ],
+//   'msgsize' => [
+//     'label' => 'Message size',
+//     'operators' => ['=', '<=', '>=', '<', '>'],
+//     'mapping' => 'size'
 //   ]
 // ];
 

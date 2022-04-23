@@ -166,6 +166,24 @@ class ElasticsearchBackend extends Backend
                 }
                 $boolFilter->add($sa, $boolOperator);
                 break;
+              case 'msgsize':
+                if ($filter['operator'] == '=') {
+                  $ms = new MatchQuery($schema['msgsize'], $filter['value']);
+                } else {
+                  $range = [];
+                  if ($filter['operator'] == '<')
+                    $range += ['lt' => $filter['value']];
+                  else if ($filter['operator'] == '<=')
+                    $range += ['lte' => $filter['value']];
+                  else if ($filter['operator'] == '>')
+                    $range += ['gt' => $filter['value']];
+                  else if ($filter['operator']  == '>=')
+                    $range += ['gte' => $filter['value']];
+
+                  $ms = new RangeQuery($schema['msgsize'], $range);
+                }
+                $boolFilter->add($ms, $boolOperator);
+                break;
               default:
                 if ($filterSettings[$filter['field']]['mapping']) {
                   if (is_array($filterSettings[$filter['field']]['mapping']))
